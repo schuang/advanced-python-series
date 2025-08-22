@@ -13,7 +13,7 @@ We will discuss:
 *   The types of problems that are easy to parallelize (**embarrassingly parallel**) and those that are more challenging (**tightly coupled**).
 *   **Amdahl's Law**, which gives us a theoretical limit on the speedup we can achieve with parallelism.
 *   Using MPI (Message Passing Interface) for distributed memory parallelism with `mpi4py`.
-*   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing.
+*   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing with `petsc4py`.
 
 ## Part 2: The MPI Paradigm
 
