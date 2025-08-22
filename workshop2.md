@@ -13,7 +13,7 @@ We will discuss:
 *   The types of problems that are easy to parallelize (**embarrassingly parallel**) and those that are more challenging (**tightly coupled**).
 *   **Amdahl's Law**, which gives us a theoretical limit on the speedup we can achieve with parallelism.
 *   Using MPI (Message Passing Interface) for distributed memory parallelism with `mpi4py`.
-*   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing with `petsc4py`.
+
 
 ## Part 2: The MPI Paradigm
 
@@ -49,3 +49,7 @@ Finally, we will apply these concepts to our two "golden examples."
 
 *   **Deep Learning (Data Parallelism):** We will explore the concept of data parallelism, where we split our dataset across multiple processes, train our model on each subset, and then combine the results. This is the most common way to do distributed deep learning.
     *   See example: [06_deep_learning_data_parallel.py](workshop-2-examples/06_deep_learning_data_parallel.py)
+
+## Part 5: Hands-on with PETSc
+
+*   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing with `petsc4py`.
