@@ -1,5 +1,5 @@
 
-# Workshop 1: Foundations for Sustainable Software
+# Workshop 1: Foundations for Sustainable Research Software
 
 **Part of the series:** *From Scripts to Software: Practical Python for Reproducible Research*
 
