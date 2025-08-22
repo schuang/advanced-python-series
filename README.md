@@ -10,6 +10,6 @@ We recognize that many researchers rely on community-developed scientific code a
 
 Series title: From Scripts to Software: Practical Python for Reproducible Research
 
-- Workshop 1: Foundations for Sustainable Software [details](workshop1.md) | [slides]()
-- Workshop 2: Scaling Your Science with Parallel Computing [details](workshop2.md) | [slides]()
-- Workshop 3: Accelerating Your Python Code with GPUs [details](workshop3.md) | [slides]()
+- Workshop 1: Foundations for Sustainable Software [details](workshop1.md) 
+- Workshop 2: Scaling Your Science with Parallel Computing [details](workshop2.md)
+- Workshop 3: Accelerating Your Python Code with GPUs [details](workshop3.md) 
