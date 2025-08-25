@@ -53,3 +53,7 @@ Finally, we will apply these concepts to our two "golden examples."
 ## Part 5: Hands-on with PETSc
 
 *   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing with `petsc4py`.
+
+## Next Step
+
+You are now ready to proceed to Workshop 3 to learn about GPU computing.
