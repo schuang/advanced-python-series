@@ -60,3 +60,10 @@ We will apply these concepts to our two "golden examples."
 ## Next Step
 
 You are now ready to proceed to Workshop 3 to learn about GPU computing.
+
+
+## References
+
+- [MPI reference](https://www.mpi-forum.org/docs/)
+- [mpi4py](https://mpi4py.readthedocs.io/en/stable/)
+- [PETSc](https://petsc.org/release/manual/)
