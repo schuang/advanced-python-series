@@ -59,7 +59,7 @@ We will apply these concepts to our two "golden examples."
 
 ## Next Step
 
-You are now ready to proceed to Workshop 3 to learn about GPU computing.
+You are now ready to proceed to **Workshop 3: Accelerating Your Code with GPUs** to learn about GPU computing.
 
 
 ## References

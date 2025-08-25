@@ -62,4 +62,4 @@ For performance-critical sections of your code, you can integrate Python with lo
 
 ## Next Steps
 
-You are now ready to proceed to Workshop 2 to learn about scaling up your code to multiple processors using MPI (Massively passing interface).
+You are now ready to proceed to **Workshop 2: Scaling Your Science with Parallel Computing** to learn about scaling up your code to multiple processors using MPI (Massively passing interface).
