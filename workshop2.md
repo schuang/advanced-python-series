@@ -2,7 +2,7 @@
 
 **Part of the series:** *From Scripts to Software: Practical Python for Reproducible Research*
 
-Now that you have a solid foundation in writing sustainable and object-oriented Python code, we will explore how to scale up your research by breaking the single-processor barrier. This workshop will introduce you to the world of parallel computing, empowering you to tackle larger research problems.
+Now that you have a solid foundation in writing sustainable and object-oriented Python code, we will explore how to scale up your research by breaking the single-processor barrier. This workshop will introduce you to parallel computing, empowering you to tackle larger research problems.
 
 ## Part 1: The "Why" of Parallelism
 
@@ -11,7 +11,7 @@ As your datasets grow and your simulations become more complex, you will inevita
 We will discuss:
 *   The difference between **distributed memory** (like in a cluster) and **shared memory** (like in your laptop).
 *   The types of problems that are easy to parallelize (**embarrassingly parallel**) and those that are more challenging (**tightly coupled**).
-*   **Amdahl's Law**, which gives us a theoretical limit on the speedup we can achieve with parallelism.
+*   The theoretical limit on the speedup we can achieve with parallelism.
 *   Using MPI (Message Passing Interface) for distributed memory parallelism with `mpi4py`.
 
 
@@ -19,10 +19,12 @@ We will discuss:
 
 The Message Passing Interface (MPI) is the de facto standard for programming on distributed memory systems. It provides a powerful and portable way to write parallel programs that can run on anything from a multi-core laptop to a massive supercomputer.
 
-We will cover the core concepts of MPI:
+We will cover the core concepts of MPI, including:
 *   The **communicator**, which is a group of processes that can talk to each other.
 *   The **rank**, which is the unique ID of a process within a communicator.
 *   The **size**, which is the total number of processes in a communicator.
+*   Point to point communication
+*   Collective communication
 
 ## Part 3: Hands-On with `mpi4py`
 
@@ -40,9 +42,13 @@ We will cover the core concepts of MPI:
 *   **Collective Communication (Scatter/Gather):** Scattering data from one process to all others, and then gathering the results back.
     *   See example: [04_mpi_scatter_gather.py](workshop-2-examples/04_mpi_scatter_gather.py)
 
-## Part 4: Applying Parallelism to the Golden Examples
+## Part 4: Hands-on with PETSc
 
-Finally, we will apply these concepts to our two "golden examples."
+*   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing with `petsc4py`.
+
+## Part 5: Applying Parallelism to the Golden Examples
+
+We will apply these concepts to our two "golden examples."
 
 *   **Heat Equation (Domain Decomposition):** We will see how to split our simulation grid across multiple processes and use halo/ghost cell exchange to communicate boundary conditions. This is a fundamental pattern in scientific HPC.
     *   See example: [05_heat_equation_mpi.py](workshop-2-examples/05_heat_equation_mpi.py)
@@ -50,6 +56,14 @@ Finally, we will apply these concepts to our two "golden examples."
 *   **Deep Learning (Data Parallelism):** We will explore the concept of data parallelism, where we split our dataset across multiple processes, train our model on each subset, and then combine the results. This is the most common way to do distributed deep learning.
     *   See example: [06_deep_learning_data_parallel.py](workshop-2-examples/06_deep_learning_data_parallel.py)
 
-## Part 5: Hands-on with PETSc
 
-*   Using PETSc (the Portable, Extensible Toolkit for Scientific Computation) for high-performance scientific computing with `petsc4py`.
+## Next Step
+
+You are now ready to proceed to **Workshop 3: Accelerating Your Code with GPUs** to learn about GPU computing.
+
+
+## References
+
+- [MPI reference](https://www.mpi-forum.org/docs/)
+- [mpi4py](https://mpi4py.readthedocs.io/en/stable/)
+- [PETSc](https://petsc.org/release/manual/)

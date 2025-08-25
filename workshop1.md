@@ -59,3 +59,7 @@ Python provides several features that make writing OOP code more elegant and con
 For performance-critical sections of your code, you can integrate Python with lower-level languages like C or C++.
 
 *   **`ctypes`:** We will briefly introduce the `ctypes` library, which allows you to call functions in shared libraries directly from Python. This is an important tool for leveraging existing high-performance libraries.
+
+## Next Steps
+
+You are now ready to proceed to **Workshop 2: Scaling Your Science with Parallel Computing** to learn about scaling up your code to multiple processors using MPI (Massively passing interface).

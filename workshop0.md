@@ -39,3 +39,7 @@ This optional workshop is for those new to Python or who need a refresher on the
 ## Next Steps
 
 With these fundamentals, you are now ready to proceed to **Workshop 1: Foundations for Sustainable Research Software**, where we will explore how to use these building blocks to write more robust and maintainable scientific code.
+
+## References
+
+- [Python book](https://assets.openstax.org/oscms-prodcms/media/documents/Introduction_to_Python_Programming_-_WEB.pdf) by OpenStax
