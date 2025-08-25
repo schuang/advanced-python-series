@@ -40,3 +40,8 @@ Finally, we will apply these JAX concepts to our two "golden examples."
 
 *   **Deep Learning:** We will rebuild our neural network from scratch in JAX and write a high-performance training loop using `jax.jit` and `jax.grad`.
     *   See example: [06_deep_learning_jax.py](workshop-3-examples/06_deep_learning_jax.py)
+
+## References
+
+- [JAX](https://docs.jax.dev/en/latest/)
+- [CuPy](https://docs.cupy.dev/en/stable/)
