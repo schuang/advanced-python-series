@@ -18,6 +18,7 @@ This optional workshop is for those new to Python or who need a refresher on the
     *   See example: [workshop-0-examples/01_data_types.py](workshop-0-examples/01_data_types.py)
 *   **Data Structures:** `lists`, `dictionaries`
     *   See example: [workshop-0-examples/02_data_structures.py](workshop-0-examples/02_data_structures.py)
+*   **Type hint**
 
 ## Part 2: Control Flow
 
