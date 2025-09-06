@@ -3,6 +3,8 @@
 
 **Part of the series:** *From Scripts to Software: Practical Python for Reproducible Research*
 
+(Check out [Workshop 0](workshop0.md))
+
 This hands-on workshop will introduce you to the principles of modern software development and show you how to apply them to your scientific projects. We will move beyond simple scripting and learn how to write Python code that is robust, reusable, and ready for the challenges of modern research. While the examples are in Python, the underlying principles of software design are universal and apply to any programming language.
 
 ### Learning Objectives
