@@ -18,7 +18,6 @@ This optional workshop is for those new to Python or who need a refresher on the
     *   See example: [workshop-0/01_data_types.py](workshop-0/01_data_types.py)
 *   **Data Structures:** `lists`, [`dictionaries`](workshop-0/dict.md).
     *   See example: [workshop-0/02_data_structures.py](workshop-0/02_data_structures.py)
-*   **Type hint**
 
 ## Part 2: Control Flow
 
@@ -40,12 +39,11 @@ This optional workshop is for those new to Python or who need a refresher on the
 
 ## Part 5: other important topics
 
-**(We will go deeper on these in workshop 1.)**
-
 - Python Constructs
-   * Data Structures: Beyond list and dict. Master [tuple](workshop-0/tuple.md) (immutability for safety), [set](workshop-0/set.md) (efficient membership testing), and collections module types like namedtuple.
-   * [Functions](workshop-0/function.md) as First-Class Objects: Pass functions as arguments, return them from other functions. This is fundamental for patterns like decorators and functional approaches.
-   * Comprehensions & Generators: Write concise, readable, and efficient code for creating lists, dicts, and sets. Use generators (x for x in ...) for memory-efficient iteration over large datasets.
+   * [tuple](workshop-0/tuple.md) and namedtuple
+   * [set](workshop-0/set.md)
+   * [Functions](workshop-0/function.md): Pass functions as arguments, return them from other functions. Decorators.
+   * Comprehensions & Generators
 
 - Structuring for Reusability
    * Modules and Packages: Organize code into separate files (modules) and directories (packages) with __init__.py to create a clear, importable structure.
@@ -54,18 +52,21 @@ This optional workshop is for those new to Python or who need a refresher on the
        * Special Methods (Dunders): __init__, __repr__, __str__, __len__. Make your objects behave like standard Python types.
        * Properties: Control attribute access with @property for cleaner APIs.
    * Decorators: A simple, powerful way to add functionality (e.g., logging, timing, caching) to functions or methods without modifying their core logic.
-   * Context Managers (`with` statement): Ensure resources like files or network connections are properly managed and released, even when errors occur.
+   * Context Managers (`with`): Ensure resources are properly managed and released.
 
 - Ensuring Code Quality
-   * [Error Handling](workshop-0/exception.md): Use try...except...else...finally blocks. Define custom exception classes to represent specific errors in your domain.
-   * Static Typing: Use type hints to improve code clarity, catch bugs early with static analysis tools (like mypy), and enable better IDE support. This makes complex data structures
-     (e.g., a dict of lists of tuples) far more understandable.
-   * Testing with [`pytest`](workshop-0/pytest.md): Write simple, effective tests. Learn about fixtures for managing test state and setup/teardown.
+   * [Error Handling](workshop-0/exception.md): `try...except...else...finally`.
+   * [Type hints](workshop-0/type_hint.md) Use type hints to improve code clarity, catch bugs early with static analysis tools (like mypy), and enable better IDE support. This makes complex data structures (e.g., a dict of lists of tuples) far more understandable.
+   * [`pytest`](workshop-0/pytest.md): Write simple, effective tests.
    * Docstrings: Document your code's API using a standard format (e.g., NumPy/SciPy or Google style) so tools can auto-generate documentation.
 
 - Environment and Dependency Management
-   * Virtual Environments: Isolate project dependencies using [`venv`](workshop-0/venv.md) or [`conda`](workshop-0/conda.md) or [`uv`](workshop-0/uv.md) to ensure reproducibility.
-   * Dependency Management: Pin dependencies in a requirements.txt or pyproject.toml file.
+   * Virtual Environments: [`venv`](workshop-0/venv.md), [`conda`](workshop-0/conda.md) and [`uv`](workshop-0/uv.md).
+   * Dependency Management: `requirements.txt` and `pyproject.toml` file.
+
+- Data and numerical computing
+   * [Numpy](workshop-0/numpy.md)
+   * [Numba](workshop-0/numba.md)
 
 
 ## Next Steps
