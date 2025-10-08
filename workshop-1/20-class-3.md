@@ -1,6 +1,7 @@
 # Python Classes: Inheritance
 
-## The "Why": Building a Layered System
+## Building a Layered System
+
 As a research project grows, the complexity can become overwhelming. A climate model isn't just one big equation; it's a layered system of interacting components: an atmospheric model, an ocean model, a sea ice model, and so on. A bioinformatics pipeline isn't a single script; it's a series of distinct tools for alignment, variant calling, and annotation.
 
 A flat collection of dozens of functions and scripts is not a good way to represent these complex, layered systems. It's hard to see the relationships between the components, and it's difficult to reuse or replace a single part without breaking the whole.
@@ -11,7 +12,7 @@ This approach has two main goals:
 1.  **To build a logical hierarchy:** It makes the structure of your code reflect the structure of your problem, which makes it easier to reason about.
 2.  **To maximize code reuse:** It allows you to write the common, shared logic once in a general "parent" class and then reuse that logic in all of your more specific "child" classes.
 
-This tutorial will cover the syntax and concepts for building these powerful, layered systems.
+This section will cover the syntax and concepts for building these powerful, layered systems.
 
 ## The Problem: Code Duplication
 Imagine you are writing a simulation. You start by creating a class for an `Atom`.
@@ -45,7 +46,7 @@ class Ion:
 
 This is a recipe for disaster. You now have duplicated code. If you find a bug in `advance_position`, you have to remember to fix it in two places. This makes your code harder to maintain and less reproducible. Inheritance solves this problem by allowing you to define the common logic once and reuse it.
 
-## The "What": Parent and Child Classes
+## Parent and Child Classes
 
 Inheritance formalizes the relationship between your concepts.
 
@@ -54,7 +55,7 @@ Inheritance formalizes the relationship between your concepts.
 
 The most important concept is the **"is-a" relationship**. An `Ion` **is a** `Particle`. An `Atom` **is a** `Particle`. This means that anything you can do to a `Particle`, you can also do to an `Ion`.
 
-## The "How": Syntax and Examples
+## Syntax and Examples
 
 Let's rebuild our example the right way.
 
@@ -68,8 +69,8 @@ class Particle:
     """The parent class for all simulation particles."""
     def __init__(self, mass, position, velocity):
         self.mass = mass
-        self.position = np.array(position)
-        self.velocity = np.array(velocity)
+        self.position = np.array(position, dtype=float)
+        self.velocity = np.array(velocity, dtype=float)
 
     def advance_position(self, dt):
         """Advances the particle's position based on its velocity."""
@@ -162,13 +163,16 @@ The `Ion` class first calls the original `describe` method from the `Particle` c
 
 By using inheritance, you create a logical and intuitive structure for your code that eliminates duplication and makes your scientific models easier to build, maintain, and share.
 
+See the complete code: `src/atom.py`.
+
 ## Abstract Classes: Defining a Contract (The Python Equivalent of C++ Virtual Classes)
 
 For those unfamiliar with the C++ term, the core idea is about creating a "contract" or a "template" for other classes to follow. Sometimes you want to define a general parent class that should not be used on its own, but instead serves as a blueprint that guarantees all of its child classes will have a consistent structure and a specific set of methods. This is a cornerstone of building large, reliable software systems.
 
 In C++, this is often done using "abstract base classes" with "pure virtual functions." Python provides the exact same functionality through its built-in `abc` (Abstract Base Class) module.
 
-### The Concept: Defining a Contract
+### Defining a "Contract"
+
 Imagine we are modeling different force fields. We know that every valid force field must be able to calculate the energy of a system. We want to enforce this rule in our code.
 
 We can create an abstract `ForceField` class that has an "abstract method" called `calculate_energy`. This class acts as a contract. You cannot create an instance of `ForceField` itself. You can only create instances of child classes that fulfill the contract by providing their own concrete implementation of `calculate_energy`.
@@ -242,9 +246,11 @@ This is the same behavior you would get from a C++ class with a pure virtual fun
 Inheritance is not limited to a single parent-child level. You can build entire family trees of classes, where a child class becomes a parent to a grandchild class. This allows you to create highly specialized classes that inherit and combine features from their entire ancestry.
 
 ### A Simple Example: The Animal Kingdom
+
 Let's model a simple hierarchy: `Animal` -> `Mammal` -> `Dog`.
 
-1.  **The Grandparent Class (Base Class)**
+1.  **The Base Class**
+
     This class is very general. It has a feature common to all animals: they have an age.
     ```python
     class Animal:
@@ -256,6 +262,7 @@ Let's model a simple hierarchy: `Animal` -> `Mammal` -> `Dog`.
     ```
 
 2.  **The Parent Class (Intermediate Class)**
+
     This class inherits from `Animal`. It adds a feature common to all mammals: they have fur.
     ```python
     class Mammal(Animal):
@@ -320,18 +327,54 @@ For those coming from other scientific computing languages, Python's approach to
 
 *   **Compared to Julia:** Julia's design is fundamentally different.
     *   **Composition over Inheritance:** Julia's community and design strongly favor a pattern called "composition" over the "inheritance" we have discussed here. Instead of a `Dog` *being an* `Animal`, you would create a `Dog` struct that *has an* `Animal` struct inside it.
-    *   **No Shared Behavior:** In Julia, you cannot inherit methods. The primary mechanism for sharing behavior is through multiple dispatch, where you define functions that operate on different data types.
+    *   **No Shared Behavior:** In Julia, you cannot inherit methods. (You can inherit types in Julia.) The primary mechanism for sharing behavior is through multiple dispatch, where you define functions that operate on different data types.
+
+In Julia, this would look like:
+
+```julia
+# You can define a type hierarchy
+abstract type Animal end
+
+struct Dog <: Animal  # Dog is a subtype of Animal
+    name::String
+end
+
+struct Cat <: Animal
+    name::String
+end
+
+# methods are defined OUTSIDE the types
+function speak(a::Animal)
+    println("Some generic animal sound")
+end
+
+function speak(d::Dog)
+    println("$(d.name) says Woof!")
+end
+
+function speak(c::Cat)
+    println("$(c.name) says Meow!")
+end
+```
+
 
 **The Advantage for Scientific Prototyping:**
-Python hits a sweet spot for scientific computing. Its inheritance model is powerful enough to build the logical hierarchies needed for complex models, but it avoids the rigid, boilerplate-heavy syntax of C++. This makes it faster to prototype, easier to read, and more straightforward to refactor as your scientific understanding of the problem evolves.
 
-## The Payoff: Polymorphism in Scientific Computing
+- Python hits a sweet spot for scientific computing
+- Inheritance model is powerful enough to build logical hierarchies needed for complex models
+- Avoids the rigid, boilerplate-heavy syntax of C++
+- Faster to prototype, easier to read, and more straightforward to refactor
+- Flexibility is crucial as your scientific understanding of the problem evolves
 
-All the concepts in this tutorial—inheritance, method overriding, and abstract classes—build towards a single, powerful design principle: **polymorphism**. This is the concept that allows you to write flexible, high-level code that can operate on a wide variety of different objects in a uniform way.
+
+## Polymorphism in Scientific Computing
+
+All the concepts about inheritance, method overriding, and abstract classes build towards a powerful design principle: **polymorphism**. This is the concept that allows you to write flexible, high-level code that can operate on a wide variety of different objects in a uniform way.
 
 The core idea is to allow a single function to accept objects of different classes, as long as they all "look" the same by adhering to a common interface.
 
-### The Scientific Problem
+### The Problem
+
 Imagine you want to run the same simulation pipeline, but test three different force field models: `LennardJones`, `Coulomb`, and a new `AI_Potential`. Without polymorphism, you might be tempted to write an `if/elif/else` block:
 
 ```python
@@ -343,9 +386,17 @@ def run_simulation(force_field, positions):
         energy = force_field.calculate_energy(positions)
     # ... you have to modify this function every time you add a new model!
 ```
-This is not scalable and is hard to maintain.
+This is not scalable and is hard to maintain because:
+
+- You must explicitly check the type with `isinstance()`
+
+- You must modify this function every time you add a new force field class!
+
+- The function is tightly coupled to specific class names
+
 
 ### The Polymorphic Solution
+
 By using the `ForceField` abstract base class we defined earlier, we create a contract that all force fields must follow. This allows us to write a single, clean, high-level function that doesn't need to know the specific details of the model it's working with.
 
 ```python
@@ -367,6 +418,10 @@ run_simulation(lj, np.random.rand(10,3))
 run_simulation(coulomb, np.random.rand(10,3))
 # run_simulation(AI_Potential(model_file='...'), positions)
 ```
+
+So polymorphism in Python is more about design philosophy (trusting interfaces) than syntax. The syntax difference is simply: with or without `isinstance()` checks!
+
+
 This is the ultimate benefit of object-oriented design. Your high-level scientific workflow is now completely **decoupled** from the specific models you are using. You can develop and test new `ForceField` models without ever having to change a single line of your main `run_simulation` function. This makes your research more flexible, your code more robust, and your science more reproducible.
 
 ---

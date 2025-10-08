@@ -1,10 +1,9 @@
+# test_heat1d.py
+# pytest demo. run with this command:
+# $ pytest -v test_heat1d.py
+
 import pytest
 import numpy as np
-
-# test_heat1d.py
-# This file demonstrates the basic use of pytest to test the object-oriented
-# solver from heat1d_ext.py. It has been updated to reflect the latest
-# refactoring of the solver.
 
 # Import the classes to be tested from the extended solver script
 from heat1d_ext import (

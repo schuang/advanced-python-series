@@ -1,20 +1,22 @@
 # Modern Python Classes: Decorators and Dataclasses
 
-This tutorial covers two powerful, modern Python features that build upon the fundamentals of classes. First, we will demystify the `@` symbol by explaining what decorators are, and then we will introduce `@dataclass`, a decorator that can dramatically simplify your class definitions.
+This section covers: 
+- Further discussion of the decorators
+- `@dataclass`: a decorator that can dramatically simplify your class definitions.
 
 ## Understanding Decorators
 
 Throughout the previous tutorials, you have already been using decorators without a formal explanation. Every time you've written `@classmethod`, `@staticmethod`, or `@abstractmethod`, you were using a decorator.
 
-So, what is the magic behind the `@` symbol?
+Recall the `@` symbol:
 
-*   **What it is:** A decorator is a function that takes another function as input, adds some functionality to it, and returns the modified function. It's a way to "wrap" or "decorate" a function to give it extra powers without changing its core logic.
+- A decorator is a function that takes another function as input, adds some functionality to it, and returns the modified function. It's a way to "wrap" or "decorate" a function to give it extra powers without changing its core logic.
 
-*   **Why it's useful:** It allows you to add reusable behaviors like logging, timing, or registration to many different functions in a clean, readable way, without cluttering up the logic of the functions themselves.
+- It allows you to add reusable behaviors like logging, timing, or registration to many different functions in a clean, readable way, without cluttering up the logic of the functions themselves.
 
-### A Simple, Practical Example: A `@timer` Decorator
+### Example: A `@timer` Decorator
 
-In scientific computing, we often want to know how long a specific calculation takes. A timer is a perfect use case for a decorator.
+In scientific computing, we often want to measure how long a specific function takes. A timer is a perfect use case for a decorator.
 
 ```python
 import time

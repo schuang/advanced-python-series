@@ -1,1 +1,9 @@
 **/__pycache__/*
+**/.vscode/*
+**/.venv/*
+**/.pytest_cache/*
+**/.mypy_cache/*
+**/.DS_Store
+**/Thumbs.db
+**/.ipynb_checkpoints/*
+*.pyc

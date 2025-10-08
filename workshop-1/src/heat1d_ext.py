@@ -1,11 +1,11 @@
+# heat1d_ext.py
+# This version adds a source term to the polymorphic solver, demonstrating
+# how the architecture can be extended to handle new physics.
+
 import numpy as np
 import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-
-# heat1d_ext.py
-# This version adds a source term to the polymorphic solver, demonstrating
-# how the architecture can be extended to handle new physics.
 
 @dataclass
 class Grid:

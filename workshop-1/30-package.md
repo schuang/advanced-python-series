@@ -4,7 +4,7 @@ So far, we have focused on how to structure your code using classes to make it r
 
 This is where **packaging** comes in. The goal of packaging is to bundle your Python code into a standardized format that can be easily installed, managed, and distributed. The gold standard is making your tool installable with a simple command: `pip install your-tool-name`.
 
-This tutorial will walk you through this process in three parts:
+This section will walk you through this process in three parts:
 1.  **Part 1: Creating Your First Package.** We will turn a local script into a properly structured project that you can install and test on your own machine.
 2.  **Part 2: Sharing Your Package.** We will cover two common ways to distribute your package: via a private GitHub repository or on the public Python Package Index (PyPI).
 3.  **Part 3: The Development Cycle.** We will show you how to release new versions of your package as you make improvements.
@@ -111,12 +111,16 @@ cd ..
 pip install heat1d-project/dist/heat1d_simulation-0.1.0-py3-none-any.whl
 ```
 
-That's it! Your package is now installed in your Python environment, just like any other package. You can now open a Python interpreter or a script from any directory on your system and use it:
+To overwrite an existing installation, use
+```
+pip install --force-reinstall dist/heat1d_simulation-0.1.0-py3-none-any.whl 
+```
+
+
+Your package is now installed in your Python environment, just like any other package. You can now open a Python interpreter or a script from any directory on your system and use it:
 
 ```python
-from heat1d.heat1d_class import Heat1D
-sim = Heat1D(nx=50)
-print(sim)
+python run-heat.py
 ```
 
 At this point, you have a fully working local package. The next step is to share it with others.

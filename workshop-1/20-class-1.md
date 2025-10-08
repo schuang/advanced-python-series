@@ -1,4 +1,4 @@
-# Python Classes: Packaging Your Science for Reproducibility
+# Python Classes
 
 As researchers, we often start with a script. We load some data, define a dozen variables for our parameters, and then run a series of functions to get a result. This works, but it's fragile. The data and the parameters are just "floating" around, and it's easy to accidentally use the wrong variable or modify data in a way that corrupts a later step.
 

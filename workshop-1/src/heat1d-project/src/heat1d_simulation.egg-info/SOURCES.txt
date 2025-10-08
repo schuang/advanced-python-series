@@ -1,0 +1,9 @@
+pyproject.toml
+src/heat1d/__init__.py
+src/heat1d/heat1d_class.py
+src/heat1d/heat_plotter.py
+src/heat1d_simulation.egg-info/PKG-INFO
+src/heat1d_simulation.egg-info/SOURCES.txt
+src/heat1d_simulation.egg-info/dependency_links.txt
+src/heat1d_simulation.egg-info/requires.txt
+src/heat1d_simulation.egg-info/top_level.txt
