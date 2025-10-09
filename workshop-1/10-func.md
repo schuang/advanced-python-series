@@ -1,34 +1,12 @@
 # Python Functions
 
-Functions vs. Linear Scripts:
+- Functions organize code into reusable, testable blocks
 
-- Linear scripts are harder to scale and modify.
-- Functions organize code into reusable, testable blocks.
-- Avoids repetition and makes code easier to debug and maintain.
-- Hide local variables inside functions.
+- Eliminate repetition and simplify debugging and maintenance
 
-"Modern" Python features to use:
+- Encapsulate local variables within function scope
 
-- Type hints
-- Pass by value and pass by reference
-- Function decorators
-- Calling functions in other files
-- Default argument values
-- Keyword-only arguments (using *, in function signature)
-- Flexible interface with `*args` and `**kwargs`
-- Return multiple values (tuples, dataclasses)
-- Type aliases for complex types
-- Context managers
-- Exception handling within functions
-- Use of functools utilities (e.g., @lru_cache, partial)
-
-Other features:
-
-- Docstrings for documentation
-- Lambda (anonymous) functions
-- Use of built-in decorators (@staticmethod, @classmethod, @property)
-- Support for asynchronous functions (async def, await)
-
+We will explore several essential features of Python functions.
 
 ---------------------------------------------------------
 
@@ -57,31 +35,28 @@ def add(x: int, y: int) -> int:
 
 **Pros:**
 
-- Improve code readability and documentation.
+- Improve readability and documentation
 
-- Help catch bugs early with static analysis tools.
+- Catch bugs early with static analysis
 
-- Make code easier to understand for collaborators.
+- Enable better IDE support (auto-completion, type checking)
 
-- Enable better IDE support (auto-completion, type checking).
-
-- Facilitate refactoring and maintenance in large projects.
+- Facilitate refactoring in large projects
 
 **Cons:**
 
-- Slightly increase code verbosity.
+- Increase code verbosity
 
-- Do not enforce types at runtime (unless using extra tools).
+- Not enforced at runtime (without extra tools)
 
-- May require extra effort for complex types or dynamic code.
+- Require extra effort for complex types
 
-- Can be confusing for beginners unfamiliar with typing syntax.
-
-- Some third-party libraries may not have complete type stubs.
+- Third-party libraries may lack type stubs
 
 **Note:** Type hints do not affect compiled Python code in libraries like Numba or JAX. These libraries ignore Python type hints and use their own mechanisms (such as decorators or explicit type annotations) for optimization and compilation. Type hints are mainly for static analysis, documentation, and editor support—not for runtime or compilation behavior in Numba/JAX.
 
 ### Type Hint Examples with NumPy
+
 ```python
 import numpy as np
 from typing import Tuple, Optional
@@ -142,7 +117,15 @@ def greet(name, greeting="Hello"):
 greet(name="Alice", greeting="Hi")
 ```
 
-You can mix positional and keyword arguments, but positional arguments must come first.
+When calling a function, you can mix positional and keyword arguments, but positional arguments must come first in the call.
+
+```python
+# Valid
+greet("Alice", greeting="Hi")  # positional, then keyword
+
+# Invalid - causes SyntaxError
+greet(name="Alice", "Hi")      # keyword before positional
+```
 
 ### Function Argument Types
 
@@ -171,8 +154,7 @@ def get_name() -> str:
 
 
 
-
-## Pass by Value vs. Pass by Reference
+## Passing values to a function
 
 - Python uses "pass by object reference" (sometimes called "pass by assignment").
 
@@ -197,9 +179,11 @@ def get_name() -> str:
 
 Avoid using `global` keyword unless absolutely necessary.
 
-- Global variables are accessible throughout the module - can lead to bugs and hard-to-maintain code.
-- Prefer passing variables as function arguments.
-- less modular, harder to test, risk of accidental modification.
+- Global variables are accessible throughout the module and can lead to bugs and hard-to-maintain code
+
+- Prefer passing variables as function arguments
+
+- Less modular, harder to test, and risk accidental modification
 
 
 
@@ -229,16 +213,24 @@ StrToIntList = Dict[str, List[int]]
 
 Type aliases are especially useful in scientific code, where data structures can be complex and reused across many functions.
 
+---------------------------------------------------------
 
 ## Exception handling within functions
 
-Exception handling makes your functions robust and user-friendly by catching and managing errors gracefully.
+Exception handling makes functions robust by catching and managing errors gracefully.
 
-When an exception is raised, control is immediately returned to the caller (or to the nearest enclosing `except` block), and the remaining lines in the function are not executed.
+Key behaviors:
 
-If an exception is not handled anywhere in your code, the program will abort and control returns to the operating system. By using exception handling, you can catch errors and keep your program running, instead of having it terminate unexpectedly.
+- When an exception is raised, control immediately **returns to the caller** (or nearest `except` block)
 
-Use `try`, `except`, and optionally `finally` blocks to handle exceptions:
+- Remaining lines in the function are not executed
+
+- Unhandled exceptions abort the program and return control to the operating system
+
+- Exception handling **keeps programs running** instead of terminating unexpectedly
+
+
+Use `try`, `except`, and optionally `finally` blocks:
 
 ```python
 def safe_divide(x: float, y: float) -> float:
@@ -265,10 +257,12 @@ def get_item(lst: list, idx: int):
     raise IndexError("Index out of range")
   return lst[idx]
 ```
+---------------------------------------------------------
+
 
 ## Default argument values
 
-Default argument values let you specify a value for a parameter if the caller does not provide one. This makes functions more flexible and easier to use.
+Default argument values allow parameters to have fallback values when not provided by the caller. This makes functions more flexible and easier to use.
 
 Example:
 ```python
@@ -279,14 +273,27 @@ greet("Alice")           # Output: Hello, Alice!
 greet("Bob", greeting="Hi")  # Output: Hi, Bob!
 ```
 
-You can set default values for any parameter except those before a required positional argument.
+Required parameters must come before parameters with default values in the function definition.
+
+```python
+# Valid
+def greet(name, greeting="Hello"):  # required first, then default
+    pass
+
+# Invalid - SyntaxError
+def greet(greeting="Hello", name):  # default before required
+    pass
+```
+
+---------------------------------------------------------
 
 
 ## Keyword-only arguments
 
-Keyword-only arguments are parameters that must be specified by name (as a keyword) when calling the function. In Python, you define them by placing a `*` in the function signature before those arguments.
+Keyword-only arguments must be specified by name when calling the function. Define them by placing a `*` in the function signature before those parameters.
 
-Example:
+Examples:
+
 ```python
 def example(a, b, *, c, d=5):
   print(a, b, c, d)
@@ -295,9 +302,18 @@ example(1, 2, c=3)      # c must be specified as a keyword
 example(1, 2, d=7, c=4) # both c and d must be specified as keywords
 ```
 
-This helps make code clearer and prevents mistakes from passing arguments in the wrong order. All arguments after `*` must be given as keywords.
+```python
+def greet(name, *, greeting):  # greeting is keyword-only
+    print(f"{greeting}, {name}!")
+
+greet("Alice", "Hello")           # ERROR! Can't pass greeting positionally
+greet("Alice", greeting="Hello")  # Required - must use keyword
+```
+
+Benefits: improves code clarity and prevents argument order mistakes. All parameters after `*` must be given as keywords.
 
 
+---------------------------------------------------------
 
 ## *args and **kwargs
 
@@ -315,6 +331,7 @@ demo(1, 2, 3, a=4, b=5)
 # Output: (1, 2, 3) {'a': 4, 'b': 5}
 ```
 
+---------------------------------------------------------
 
 ## Context managers (with statement, custom via __enter__/__exit__)
 
@@ -332,10 +349,10 @@ with open("data.txt") as f:
 # File is automatically closed when the block ends
 ```
 
+
 ### Connecting to a database
 
 ```python
-
 import sqlite3
 
 # Using the built-in context manager for sqlite3
@@ -347,8 +364,39 @@ with sqlite3.connect("example.db") as conn:
     cursor.execute("SELECT * FROM users")
     print(cursor.fetchall())
 # Connection is automatically closed when the block ends
-
 ```
+
+### Custom Context Manager
+
+You can create your own context managers by defining `__enter__` and `__exit__` methods:
+
+```python
+class Timer:
+    def __enter__(self):
+        import time
+        self.start = time.time()
+        print("Timer started")
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        import time
+        elapsed = time.time() - self.start
+        print(f"Timer stopped. Elapsed time: {elapsed:.2f}s")
+        return False  # Don't suppress exceptions
+
+# Usage
+with Timer():
+    # Do some work
+    sum([i**2 for i in range(1000000)])
+```
+
+- The `__enter__` method runs when entering the `with` block and can return a value. 
+
+- The `__exit__` method runs when exiting the block (even if an error occurs) and receives exception information if an error happened.
+
+
+---------------------------------------------------------
+
 
 ## Function Decorators
 
@@ -356,23 +404,24 @@ with sqlite3.connect("example.db") as conn:
  
 - Common uses: logging, timing, access control.
 
-### Example 1
-  ```python
-  def my_decorator(func):
-      def wrapper(*args, **kwargs):
-          print("Before function call")
-          result = func(*args, **kwargs)
-          print("After function call")
-          return result
-      return wrapper
+### Example
 
-  @my_decorator
-  def greet(name):
-      print(f"Hello, {name}!")
-  greet("Alice")
-  ```
+```python
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print("Before function call")
+        result = func(*args, **kwargs)
+        print("After function call")
+        return result
+    return wrapper
 
-### timing example
+@my_decorator
+def greet(name):
+    print(f"Hello, {name}!")
+greet("Alice")
+```
+
+### Example
 
 ```python
 import time
@@ -400,14 +449,17 @@ slow_function()
 ## Calling Functions from Other Files
 
 - Use `import` to access functions defined in other Python files (modules).
-- Example:
-  - In `utils.py`:
-    ```python
-    def helper():
-        print("Helping!")
-    ```
-  - In another file:
-    ```python
-    from utils import helper
-    helper()
-    ```
+
+In `utils.py`:
+
+```python
+def helper():
+    print("Helping!")
+```
+
+In another file:
+
+```python
+from utils import helper
+helper()
+```

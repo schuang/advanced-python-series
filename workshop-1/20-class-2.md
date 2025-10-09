@@ -1,24 +1,36 @@
 # Python Classes: Syntax and Grammar
 
-
-This guide covers the fundamental syntax and grammar for creating and using classes in Python. It focuses on the "how," explaining the core components you will use to build your own objects.
+This guide covers fundamental syntax for creating and using classes in Python.
 
 ## The Core Concept: Blueprints and Instances
 
-Before diving into the syntax, let's clarify the two core concepts: a "class" and an "object."
+Two core concepts:
 
-*   A **Class** is a **blueprint**. It's a template that defines the structure and behavior of something. For example, we can write a `Molecule` class that defines that all molecules must have a `name` and a set of `coordinates`.
+- Class: a blueprint defining structure and behavior
+  - Example: `Molecule` class defines that all molecules have `name` and `coordinates`
 
-*   An **Object** is a specific **instance** created from that blueprint. Using our `Molecule` class, we can create many distinct molecule objects, like `water` or `caffeine`. They are both created from the same `Molecule` blueprint, but they are separate objects, each holding its own specific data (its own name and coordinates).
+- Object: a specific instance created from the blueprint
+  - Example: `water` and `caffeine` objects created from `Molecule` class
+  - Each holds its own unique data
 
-### Why is this worth the effort?
-In a script, you might have dozens of "loose" variables for each molecule you are analyzing. This is error-prone. The class-based approach allows you to create a single, coherent `water` object. This object *knows* its own name and coordinates. You don't pass its data *to* a function; you ask the object to run its *own* method (e.g., `water.calculate_center_of_mass()`). This bundling of data and behavior is what makes your code safer, more organized, and ultimately easier to debug and share.
+### Why use classes?
+
+Scripts with loose variables are error-prone. Classes provide:
+
+- Single, coherent object (e.g., `water`) that knows its own data
+- Call methods on the object (e.g., `water.calculate_center_of_mass()`)
+- Bundle data and behavior together
+- Safer, more organized, easier to debug and share
 
 ## The Basic Structure: `class` and `__init__`
 
-Everything starts with the `class` keyword, followed by the name of the class. Inside the class, you define special functions called **methods**. A method is simply a function that "belongs" to a class.
+Basic components:
 
-The most important method is `__init__`. This is the **constructor**. It is called automatically by Python every time you create a new instance of the class. Its primary job is to set up the initial state of the object by creating its **attributes**.
+- `class` keyword followed by class name
+- Methods: functions that belong to a class
+- `__init__`: the constructor
+  - Called automatically when creating new instance
+  - Sets up initial state by creating attributes
 
 ```python
 class Molecule:
@@ -37,23 +49,35 @@ class Molecule:
 
 ## The `self` Keyword: The Most Important Concept
 
-What is `self`? In Python, `self` is the conventional name for the **first argument of any method that belongs to an instance of a class**.
+`self` is the first argument of any instance method.
 
-*   **What it represents:** `self` refers to the specific object (the instance) that a method is being called on.
-*   **How it works:** When you write `my_molecule.some_method()`, Python automatically passes the `my_molecule` object as the `self` argument to the method.
+Key points:
 
-This might seem a bit circular: why does a method that *belongs* to an object need to be told which object it is? Think of it this way: the method (e.g., `calculate_center_of_mass`) is defined only once on the `Molecule` class (the blueprint). When you have two different molecule objects, `water` and `caffeine`, and you call `water.calculate_center_of_mass()`, Python needs to tell the general `calculate_center_of_mass` method that *this time*, it should operate specifically on the `water` object's data. The `self` argument is how Python makes that connection.
+- Refers to the specific object (instance) the method is called on
+- When you write `my_molecule.some_method()`, Python automatically passes `my_molecule` as `self`
 
-You use `self` inside a method to access the object's own attributes and other methods. For example, in `__init__`, `self.name = name` means "take the input `name` and store it in an attribute called `name` that belongs to *this specific object*."
+Why is `self` needed?
+
+- Methods are defined once on the class (blueprint)
+- Multiple objects can exist (`water`, `caffeine`)
+- When calling `water.calculate_center_of_mass()`, Python needs to know which object's data to use
+- `self` makes that connection
+
+Usage:
+
+- Access object's own attributes and methods inside the method
+- Example: `self.name = name` stores input `name` in this specific object's attribute
 
 ## Building a Class: A Step-by-Step Example
 
 To understand the syntax, we will build up a single, coherent `Molecule` class from scratch.
 
 ### 1. The `__init__` Method and Instance Attributes
-We start with the `class` keyword and the `__init__` constructor. Our goal is to create `Molecule` objects that each have their own unique `name`, `formula`, and `coordinates`. These are **instance attributes**.
 
-We also create a `_known_elements` set as a **class attribute**. This will be shared across all `Molecule` objects we create.
+Goal: Create `Molecule` objects with unique `name`, `formula`, and `coordinates`.
+
+- Instance attributes: unique to each object
+- Class attribute: `_known_elements` set, shared across all `Molecule` objects
 
 ```python
 import numpy as np
@@ -76,7 +100,8 @@ class Molecule:
 ```
 
 ### 2. Instance Methods
-Now we add **instance methods** to work with the unique data of each object. Notice they all take `self` as their first argument, giving them access to `self.coordinates`.
+
+Instance methods work with unique data of each object. All take `self` as first argument for access to object attributes.
 
 ```python
 # Continuing the Molecule class...
@@ -90,39 +115,51 @@ Now we add **instance methods** to work with the unique data of each object. Not
 ```
 
 ### 3. Class Methods
-Next, we add a **class method** to work with the shared `_known_elements` set. It takes `cls` as its first argument, giving it access to the class attribute `cls._known_elements`. We also add a class method to act as an alternative constructor.
+
+Class methods work with shared data across all instances. Take `cls` as first argument for access to class attributes. Can also serve as alternative constructors.
 
 ```python
 # Continuing the Molecule class...
-    @classmethod
-    def get_all_known_elements(cls):
-        """Returns the set of elements seen across all molecules."""
-        return sorted(list(cls._known_elements))
+@classmethod
+def get_all_known_elements(cls):
+    """Returns the set of elements seen across all molecules."""
+    return sorted(list(cls._known_elements))
 
-    @classmethod
-    def from_pdb_file(cls, filename):
-        """Creates a Molecule instance by reading a PDB file."""
-        # In a real function, you would parse the file.
-        # Here, we'll just use placeholder data.
-        print(f"Parsing {filename}...")
-        parsed_name = "Caffeine"
-        parsed_formula = "C8H10N4O2"
-        parsed_coords = np.random.rand(24, 3) # Placeholder
-        
-        # The method calls the standard constructor `cls(...)` to create the object.
-        return cls(parsed_name, parsed_formula, parsed_coords)
+@classmethod
+def from_pdb_file(cls, filename):
+    """Creates a Molecule instance by reading a PDB file."""
+    # In a real function, you would parse the file.
+    # Here, we'll just use placeholder data.
+    print(f"Parsing {filename}...")
+    parsed_name = "Caffeine"
+    parsed_formula = "C8H10N4O2"
+    parsed_coords = np.random.rand(24, 3) # Placeholder
+    
+    # The method calls the standard constructor `cls(...)` to create the object.
+    return cls(parsed_name, parsed_formula, parsed_coords)
 ```
 
 ### 4. Static Methods
-Finally, we add a **static method** to provide a related utility function that doesn't need access to any specific instance or class data.
+
+Static methods provide utility functions related to the class but don't need access to instance or class data.
 
 ```python
 # Continuing the Molecule class...
-    @staticmethod
-    def get_atomic_mass(element_symbol):
-        """A utility function to get atomic mass."""
-        masses = {'H': 1.008, 'C': 12.011, 'O': 15.999, 'N': 14.007}
-        return masses.get(element_symbol, 0.0)
+@staticmethod
+def get_atomic_mass(element_symbol):
+    """A utility function to get atomic mass."""
+    masses = {'H': 1.008, 'C': 12.011, 'O': 15.999, 'N': 14.007}
+    return masses.get(element_symbol, 0.0)
+```
+
+Usage:
+```python
+# Call static method on the class itself
+mass = Molecule.get_atomic_mass('C')  # Returns 12.011
+
+# Can also call on an instance (but not recommended)
+water = Molecule('Water', 'H2O', [[0,0,0]])
+mass = water.get_atomic_mass('H')  # Returns 1.008
 ```
 
 ### The Complete Class
@@ -178,24 +215,30 @@ The key is to distinguish between data that is unique to an instance versus data
 | **Class Method** | `@classmethod` | `cls` | Shared class data (e.g., `cls._known_elements`) |
 | **Static Method** | `@staticmethod`| (None) | Only its own inputs |
 
-## A Note on Naming Conventions
+## Naming Conventions
 
-While Python doesn't strictly enforce naming rules, the community has adopted strong conventions that make code much more readable.
+Python doesn't strictly enforce naming rules, but strong community conventions improve readability.
 
-*   **Class Names:** Use `CamelCase` (also known as `PascalCase`), where the first letter of each word is capitalized (e.g., `Molecule`, `SimulationAnalysis`).
-*   **Function and Method Names:** Use `snake_case`, where all letters are lowercase and words are separated by underscores (e.g., `calculate_center_of_mass`, `load_data`).
-*   **Variable and Attribute Names:** Also use `snake_case` (e.g., `self.coordinates`, `carbon_mass`).
+- Class Names: `CamelCase` (first letter of each word capitalized)
+  - Examples: `Molecule`, `SimulationAnalysis`
 
-Following these conventions makes it easy to distinguish at a glance between classes, functions, and variables in your code.
+- Function and Method Names: `snake_case` (lowercase with underscores)
+  - Examples: `calculate_center_of_mass`, `load_data`
+
+- Variable and Attribute Names: `snake_case`
+  - Examples: `self.coordinates`, `carbon_mass`
+
+These conventions make it easy to distinguish classes, functions, and variables at a glance.
 
 ## Simulating Multiple Constructors (vs. C++)
 
-A common question from those with a C++ background is, "How do I create multiple constructors?" In C++, you can define multiple constructor methods with different arguments (function overloading). In Python, this is not allowed; a second `__init__` method would simply overwrite the first.
+In C++, you can define multiple constructors with different arguments (function overloading). Python doesn't allow this—a second `__init__` would overwrite the first.
 
-However, Python provides two powerful patterns to achieve the same goal.
+Python offers two patterns to achieve the same goal.
 
 ### Pattern 1: Default Arguments in `__init__`
-This simple approach uses a single `__init__` method with optional arguments (defaulting to `None`). You then use `if/elif` logic to handle the different construction cases.
+
+Single `__init__` with optional arguments (default to `None`). Use `if/elif` logic to handle different cases.
 
 ```python
 class Molecule:
@@ -213,11 +256,13 @@ class Molecule:
 water = Molecule('Water', coordinates=[[0,0,0]])
 caffeine = Molecule('Caffeine', filename='caffeine.pdb')
 ```
-*   **Pros:** Simple for a small number of variations.
-*   **Cons:** The `__init__` method can become complex and messy.
+
+Pros: Simple for few variations  
+Cons: `__init__` can become complex and messy
 
 ### Pattern 2: `@classmethod` Factories (Recommended)
-This is the most powerful and "Pythonic" pattern. You keep your `__init__` method simple and direct, and you create a separate, well-named class method for each alternative way to create an object. This is the same "alternative constructor" pattern discussed earlier.
+
+Most powerful and Pythonic. Keep `__init__` simple and direct. Create separate, well-named class methods for each alternative constructor. Same "alternative constructor" pattern discussed earlier.
 
 ```python
 class Molecule:
@@ -238,8 +283,9 @@ class Molecule:
 water = Molecule('Water', coordinates=[[0,0,0]])
 caffeine = Molecule.from_file('Caffeine', filename='caffeine.pdb')
 ```
-*   **Pros:** Extremely clean, readable, and scalable. `Mole-cule.from_file()` is self-documenting.
-*   **Cons:** Requires slightly more lines of code.
+
+Pros: Clean, readable, scalable. `Molecule.from_file()` is self-documenting  
+Cons: Requires slightly more lines of code
 
 ## Advanced Topic: Simulating Multiple Dispatch (vs. Julia)
 

@@ -29,109 +29,99 @@ Resources:
 
 # Introduction
 
+## Observation
+
+- Python has become a dominant language for scientific computing and machine learning
+
+- Widespread use of Notebooks has led to proliferation of "linear" scripts that are difficult to reuse
+
+- Advanced Python features for software reuse remain underutilized in research code
+
+- Many Python codebases are limited to single-core execution
+
+- Multi-core CPUs are standard, and GPU resources are increasingly accessible
+
+
 ## Software Sustainability
 
-- Ensures research code remains usable and maintainable over time
+- Keeps research code usable and maintainable over time
 
-- Facilitates collaboration and sharing with other scientists
+- Facilitates collaboration and sharing across research teams
 
-- Reduces risk of code becoming obsolete
+- Prevents code from becoming obsolete or unusable
 
-- Enables easier updates, bug fixes, and feature additions
+- Enables efficient updates, bug fixes, and feature enhancements
 
-- Supports reproducibility and transparency in scientific results
+- Ensures reproducibility and transparency in scientific workflows
 
-- Distinguish one time "thrown-away" script from sustainable software
+- Distinguishes sustainable software from disposable one-time scripts
 
 
 ## General Goals of This Workshop Series
 
-- Transition from ad-hoc scripts to well-structured, reusable software
+- Transform ad-hoc scripts into well-structured, reusable software
 
-- Teach (or encourage) best practices for writing maintainable code
+- Teach best practices for writing maintainable research code
 
-- Introduce tools for version control, testing, and documentation
-
-- Demonstrate how to package code for sharing and reuse
+- Demonstrate how to package and distribute code effectively
 
 - Emphasize reproducibility in computational workflows
 
-- Provide hands-on examples relevant to scientific computing
+- Provide hands-on examples for scientific computing applications
 
-- Embrace modern computer architecture with parallel computing (multi-core, GPU)
+- Leverage modern hardware: multi-core CPUs and GPUs
 
-- Empower researchers to build robust, sustainable software for science
+- Empower researchers to build robust, sustainable software
 
 
 ## Why Learn This in the LLM Era?
 
-Even with powerful LLM-based coding assistants, understanding software design principles remains critical:
+Even with powerful LLM-based code-generating assistants, understanding software design principles remains critical:
 
-- **You provide the human intelligence**
+- You provide the human intelligence
+
   - LLMs need clear, structured prompts that reflect good design thinking
+  
   - You must specify what architecture, patterns, and structure you want
+  
   - Without understanding concepts like classes, inheritance, or packaging, you can't guide the LLM effectively
 
-- **You must read and validate generated code**
+- You must read and validate generated code
+  
   - LLMs make mistakes, introduce bugs, and sometimes generate outdated or inefficient patterns
+  
   - You need to recognize when code follows best practices vs. anti-patterns
-  - Understanding the principles lets you spot problems before they become technical debt
-
-- **You maintain and evolve the codebase**
+  
+- You maintain and evolve the codebase
+  
   - Generated code needs to be integrated, refactored, and maintained over time
+  
   - You make architectural decisions that LLMs cannot: "Should this be a class or a function?" "How should components interact?"
+  
   - Long-term project success depends on human oversight of structure and design
 
-- **Scientific integrity requires understanding**
-  - You are responsible for the correctness of your computational research
-  - Blindly trusting generated code without understanding it is as risky as using a statistical method you don't comprehend
-  - Peer reviewers and collaborators expect you to explain and justify your code design choices
-
-- **LLMs amplify your expertise, not replace it**
-  - With strong fundamentals, you can use LLMs to code 10x faster
-  - Without fundamentals, LLMs produce code you can't debug, maintain, or trust
-  - The goal: use AI as a force multiplier for your knowledge, not a substitute
 
 
 ## Transitioning from Scripts to Software
 
 A Staged Approach (using Python as an example)
 
-- Group "linear" scripts into functions 
-  - Each function should do one thing (single responsibility principle).
-  - Name the functions properly
-  - Code comments + documentation
-
-- Group related functions together into classes
-
-- Modules help organize functions and classes by topic or workflow.
-
-- It takes a lot of practice to get it right.
-
-
-
-### Classes vs. Modules in Python
-
-Classes:
-
-- A class defines a blueprint for creating objects that bundle data (attributes) and behavior (methods).
-
-- Ideal for representing complex entities or workflows where state and operations are tightly coupled (e.g., a simulation, a data processor).
-
-- Supports encapsulation, inheritance, and polymorphism, enabling more advanced software design.
-
-- Classes are defined within modules and can be reused across projects.
-
-- Classes bundle related data and methods for more complex tasks.
+- **Refactor linear scripts into functions**
   
-Modules:
+  - Each function does one thing (single responsibility principle)
+  
+  - Use descriptive, meaningful function names
+  
+  - Add clear comments and documentation
 
-- A module is a single Python file, or a collection of files, that groups related functions, variables, and classes.
+- **Group related functions into classes**
 
-- Useful for organizing code by topic, workflow, or functionality (e.g., `math.py`, `io_utils.py`).
+- **Organize code into modules** by topic or workflow
 
-- Promotes code reuse and separation of concerns.
+- **Practice is essential** — mastering this skill takes time
 
-- Modules are imported using the `import` statement, making code easy to share and maintain.
+
+Bottom line: for sustainable code, organize logic into functions rather than linear scripts.
+
 
 

@@ -1,0 +1,10 @@
+pre {
+      background-color: #f0f0f0; /* Light gray background */
+      padding: 1em; /* Add some padding around the code */
+      border-radius: 5px; /* Rounded corners */
+    }
+
+    /* You can also target specific code elements within the pre tag if needed */
+    pre code {
+      color: #333; /* Darker text color */
+    }

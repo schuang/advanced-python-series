@@ -1,14 +1,14 @@
 ## Releasing Your Package
 
-Once your package is built and tested, you need to host the distribution files (`.whl` and `.tar.gz`) somewhere others can access them. We will cover two common methods.
+Once your package is built and tested, you need to host the distribution files (`.whl` and `.tar.gz`) somewhere others can access them. Two common methods:
 
 ### Option A: Distributing via GitHub Releases
 
-For many projects, especially internal tools or research code, a full release to PyPI is unnecessary. A great alternative is to use GitHub Releases. This workflow ties your package versions directly to your source control, which is excellent for reproducibility.
+For many projects, especially internal tools or research code, full release to PyPI is unnecessary. Great alternative: use GitHub Releases. This workflow ties your package versions directly to your source control—excellent for reproducibility.
 
-The process integrates `git` with the build process.
+Process integrates `git` with the build process.
 
-1.  **Commit Your Changes:** Make sure all your code changes for the new version are committed to your repository.
+1. Commit Your Changes: make sure all your code changes for the new version are committed to your repository
 
 2.  **Tag the Version:** Create a `git` tag that matches the version number in your `pyproject.toml`. This permanently marks that specific commit as that version. It's common to use tags like `v0.1.0`.
     ```bash

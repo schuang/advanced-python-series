@@ -2,17 +2,16 @@
 
 ## Building a Layered System
 
-As a research project grows, the complexity can become overwhelming. A climate model isn't just one big equation; it's a layered system of interacting components: an atmospheric model, an ocean model, a sea ice model, and so on. A bioinformatics pipeline isn't a single script; it's a series of distinct tools for alignment, variant calling, and annotation.
+Research projects grow complex. Climate models have layered, interacting components: atmospheric, ocean, sea ice models. Bioinformatics pipelines chain distinct tools: alignment, variant calling, annotation.
 
-A flat collection of dozens of functions and scripts is not a good way to represent these complex, layered systems. It's hard to see the relationships between the components, and it's difficult to reuse or replace a single part without breaking the whole.
+Flat collections of functions and scripts don't represent these layered systems well. Hard to see relationships. Hard to reuse or replace parts without breaking everything.
 
-**Inheritance** is the primary tool that object-oriented programming gives us to manage this complexity. It allows us to build a **hierarchy** of classes that mirrors the logical structure of our scientific problem. It lets us define a general, abstract concept at the top (e.g., a `ForceField`) and then create more specific, concrete implementations below (e.g., a `LennardJonesForceField` and a `CoulombForceField`).
+Inheritance is the primary tool for managing this complexity. Build a hierarchy of classes that mirrors your scientific problem's logical structure. Define general, abstract concepts at the top (e.g., `ForceField`). Create specific, concrete implementations below (e.g., `LennardJonesForceField`, `CoulombForceField`).
 
-This approach has two main goals:
-1.  **To build a logical hierarchy:** It makes the structure of your code reflect the structure of your problem, which makes it easier to reason about.
-2.  **To maximize code reuse:** It allows you to write the common, shared logic once in a general "parent" class and then reuse that logic in all of your more specific "child" classes.
+Two main goals:
 
-This section will cover the syntax and concepts for building these powerful, layered systems.
+1. Build a logical hierarchy: code structure reflects problem structure
+2. Maximize code reuse: write common logic once in parent class, reuse in all child classes
 
 ## The Problem: Code Duplication
 Imagine you are writing a simulation. You start by creating a class for an `Atom`.
@@ -50,10 +49,14 @@ This is a recipe for disaster. You now have duplicated code. If you find a bug i
 
 Inheritance formalizes the relationship between your concepts.
 
-*   You create a general **parent class** (also called a "base class" or "superclass") that contains all the common data and methods. In our case, this would be a `Particle` class.
-*   You then create **child classes** (also called "derived classes" or "subclasses") that **inherit** all the attributes and methods from the parent. These child classes can then add their own unique attributes and methods, or modify the ones they inherited.
+- Parent class (base class, superclass): contains all common data and methods
+  - Example: `Particle` class
 
-The most important concept is the **"is-a" relationship**. An `Ion` **is a** `Particle`. An `Atom` **is a** `Particle`. This means that anything you can do to a `Particle`, you can also do to an `Ion`.
+- Child classes (derived classes, subclasses): inherit all attributes and methods from parent
+  - Can add unique attributes and methods
+  - Can modify inherited ones
+
+Key concept: the "is-a" relationship. An `Ion` is a `Particle`. An `Atom` is a `Particle`. Anything you can do to a `Particle`, you can do to an `Ion`.
 
 ## Syntax and Examples
 
@@ -167,15 +170,15 @@ See the complete code: `src/atom.py`.
 
 ## Abstract Classes: Defining a Contract (The Python Equivalent of C++ Virtual Classes)
 
-For those unfamiliar with the C++ term, the core idea is about creating a "contract" or a "template" for other classes to follow. Sometimes you want to define a general parent class that should not be used on its own, but instead serves as a blueprint that guarantees all of its child classes will have a consistent structure and a specific set of methods. This is a cornerstone of building large, reliable software systems.
+Core idea: create a "contract" or "template" for other classes to follow. Define a general parent class that should not be used on its own, but serves as a blueprint guaranteeing all child classes have consistent structure and specific methods. Cornerstone of building large, reliable software systems.
 
-In C++, this is often done using "abstract base classes" with "pure virtual functions." Python provides the exact same functionality through its built-in `abc` (Abstract Base Class) module.
+C++ does this with "abstract base classes" and "pure virtual functions." Python provides the same functionality through the built-in `abc` (Abstract Base Class) module.
 
 ### Defining a "Contract"
 
-Imagine we are modeling different force fields. We know that every valid force field must be able to calculate the energy of a system. We want to enforce this rule in our code.
+Modeling different force fields. Every valid force field must calculate the energy of a system. We want to enforce this rule in code.
 
-We can create an abstract `ForceField` class that has an "abstract method" called `calculate_energy`. This class acts as a contract. You cannot create an instance of `ForceField` itself. You can only create instances of child classes that fulfill the contract by providing their own concrete implementation of `calculate_energy`.
+Create an abstract `ForceField` class with an "abstract method" called `calculate_energy`. This class acts as a contract. Cannot create an instance of `ForceField` itself. Can only create instances of child classes that fulfill the contract by providing their own concrete implementation of `calculate_energy`.
 
 ### The Syntax: `ABC` and `@abstractmethod`
 
@@ -318,16 +321,16 @@ This layered approach is extremely powerful for organizing complex scientific mo
 
 ## Python's Inheritance vs. C++ and Julia
 
-For those coming from other scientific computing languages, Python's approach to inheritance can feel simpler and more flexible, which is a significant advantage for rapid research and development.
+Coming from other scientific computing languages? Python's inheritance is simpler and more flexible—significant advantage for rapid research and development.
 
-*   **Compared to C++:** Python's inheritance is much less verbose.
-    *   **No Header Files:** You define the class and its methods in a single `.py` file.
-    *   **No `virtual` Keyword:** In Python, all methods are "virtual" by default. This means that when you call `my_object.my_method()`, Python will always run the version of the method from the most specific child class, which is almost always the behavior you want. You don't need to explicitly declare it.
-    *   **Multiple Inheritance:** Python supports inheriting from multiple parent classes (`class C(A, B):`), which can be a powerful but complex feature. C++ also supports this, but Python's dynamic nature often makes it easier to manage.
+- Compared to C++: Python's inheritance is much less verbose
+  - No Header Files: define class and methods in single `.py` file
+  - No `virtual` Keyword: all methods are "virtual" by default. When you call `my_object.my_method()`, Python runs the version from the most specific child class. No explicit declaration needed
+  - Multiple Inheritance: Python supports inheriting from multiple parents (`class C(A, B):`). Powerful but complex. C++ supports this too, but Python's dynamic nature makes it easier to manage
 
-*   **Compared to Julia:** Julia's design is fundamentally different.
-    *   **Composition over Inheritance:** Julia's community and design strongly favor a pattern called "composition" over the "inheritance" we have discussed here. Instead of a `Dog` *being an* `Animal`, you would create a `Dog` struct that *has an* `Animal` struct inside it.
-    *   **No Shared Behavior:** In Julia, you cannot inherit methods. (You can inherit types in Julia.) The primary mechanism for sharing behavior is through multiple dispatch, where you define functions that operate on different data types.
+- Compared to Julia: Julia's design is fundamentally different
+  - Composition over Inheritance: Julia strongly favors "composition" over inheritance. Instead of `Dog` being an `Animal`, create a `Dog` struct that has an `Animal` struct inside it
+  - No Shared Behavior: cannot inherit methods in Julia (can inherit types). Primary mechanism for sharing behavior is multiple dispatch—define functions that operate on different data types
 
 In Julia, this would look like:
 
@@ -369,13 +372,13 @@ end
 
 ## Polymorphism in Scientific Computing
 
-All the concepts about inheritance, method overriding, and abstract classes build towards a powerful design principle: **polymorphism**. This is the concept that allows you to write flexible, high-level code that can operate on a wide variety of different objects in a uniform way.
+All the concepts about inheritance, method overriding, and abstract classes build towards a powerful design principle: polymorphism. Write flexible, high-level code that operates on a wide variety of different objects in a uniform way.
 
-The core idea is to allow a single function to accept objects of different classes, as long as they all "look" the same by adhering to a common interface.
+Core idea: single function accepts objects of different classes, as long as they all "look" the same by adhering to a common interface.
 
 ### The Problem
 
-Imagine you want to run the same simulation pipeline, but test three different force field models: `LennardJones`, `Coulomb`, and a new `AI_Potential`. Without polymorphism, you might be tempted to write an `if/elif/else` block:
+Run the same simulation pipeline, but test three different force field models: `LennardJones`, `Coulomb`, and a new `AI_Potential`. Without polymorphism, you might write an `if/elif/else` block:
 
 ```python
 # The NON-polymorphic way (BAD PRACTICE)
@@ -428,12 +431,17 @@ This is the ultimate benefit of object-oriented design. Your high-level scientif
 
 ## Key Takeaways
 
-*   **Inheritance** is the primary tool for building a logical **hierarchy** of classes and maximizing **code reuse**.
-*   A **child class** inherits all methods and attributes from its **parent class**. Use `class Child(Parent):` to define this relationship.
-*   Use `super().__init__(...)` in the child's constructor to ensure the parent class is properly initialized.
-*   A child class can **override** a parent's method by defining a method with the same name. It can **extend** the parent's method by calling `super().method_name()` inside the new implementation.
-*   **Abstract Base Classes** (using `ABC` and `@abstractmethod`) allow you to define a "contract" or an interface, forcing child classes to implement specific methods. This is the Python equivalent of C++ pure virtual functions.
-*   **Polymorphism** is the payoff for using inheritance correctly. It allows you to write clean, high-level functions that can operate on any object that adheres to a common interface, making your code flexible and extensible.
+- Inheritance: primary tool for building logical hierarchy of classes and maximizing code reuse
+
+- Child class inherits all methods and attributes from parent class. Use `class Child(Parent):` to define this relationship
+
+- Use `super().__init__(...)` in child's constructor to ensure parent class is properly initialized
+
+- Child class can override parent's method by defining method with same name. Can extend parent's method by calling `super().method_name()` inside new implementation
+
+- Abstract Base Classes (using `ABC` and `@abstractmethod`) define a "contract" or interface, forcing child classes to implement specific methods. Python equivalent of C++ pure virtual functions
+
+- Polymorphism: the payoff for using inheritance correctly. Write clean, high-level functions that operate on any object adhering to a common interface, making code flexible and extensible
 
 ---
 
