@@ -16,12 +16,12 @@ This hands-on workshop will introduce you to the principles of modern software d
 
 ## Topics
 
-* [Introduction](workshop-1/00-intro.md)
-* [Functions](workshop-1/10-func.md)
-* [Class overview](workshop-1/20-class-1.md)
-* [Class syntax and grammar](workshop-1/20-class-2.md)
-* [inheritance](workshop-1/20-class-3.md)
-* [dataclass](workshop-1/20-class-4.md)
-* [Package your software](workshop-1/30-package.md)
-* [Distribute your software](workshop-1/40-release.md)
+* [Introduction](00-intro.md)
+* [Functions](10-func.md)
+* [Class overview](20-class-1.md)
+* [Class syntax and grammar](20-class-2.md)
+* [inheritance](20-class-3.md)
+* [dataclass](20-class-4.md)
+* [Package your software](30-package.md)
+* [Distribute your software](40-release.md)
 

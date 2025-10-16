@@ -6,17 +6,17 @@ Now that you have a solid foundation in writing sustainable and object-oriented 
 
 ## Topics
 
-* [Introduction](workshop-2/00-intro.md)
-* [Environment setup](workshop-2/21-environment.md)
-* [MPI](workshop-2/20-mpi-paradigm.md)
-* [PETSc](workshop-2/40-petsc.md)
-* [Application - FFT/MRI](workshop-2/31-mri.md)
-* [Application - Optimization](workshop-2/41-petsc_tao_app.md)
-* [Application - Eigenvalue](workshop-2/42-petsc-eigen.md)
-* [Application - network](workshop-2/44-petsc-network.md)
-* [Application - wave propogation](workshop-2/45-petsc-wave.md)
-* [Application - machine learning](workshop-2/46-petsc-ml.md)
-* [Application - Genomics](workshop-2/47-petsc-genomics.md)
+* [Introduction](00-intro.md)
+* [Environment setup](21-environment.md)
+* [MPI](20-mpi-paradigm.md)
+* [PETSc](40-petsc.md)
+* [Application - FFT/MRI](31-mri.md)
+* [Application - Optimization](41-petsc_tao_app.md)
+* [Application - Eigenvalue](42-petsc-eigen.md)
+* [Application - network](44-petsc-network.md)
+* [Application - wave propogation](45-petsc-wave.md)
+* [Application - machine learning](46-petsc-ml.md)
+* [Application - Genomics](47-petsc-genomics.md)
 
 
 ## Next Step
