@@ -1,0 +1,12 @@
+iniconfig==2.1.0
+mpi4py==4.1.1
+mpi4py-fft==2.0.6
+numpy==2.3.4
+packaging==25.0
+petsc==3.24.0
+petsc4py==3.24.0
+pluggy==1.6.0
+Pygments==2.19.2
+pytest==8.4.2
+slepc==3.24.0
+slepc4py==3.24.0

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="260" viewBox="0 0 920 260">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2c3e50"/>
+    </marker>
+    <style type="text/css"><![CDATA[
+      .stage { fill: #ecf0f1; stroke: #2c3e50; stroke-width: 2; rx: 12; ry: 12; }
+      .label { font-family: "DejaVu Sans", Arial, Helvetica, sans-serif; font-size: 18px; fill: #2c3e50; }
+      .caption { font-family: "DejaVu Sans", Arial, Helvetica, sans-serif; font-size: 16px; fill: #34495e; }
+      .highlight { fill: #dff0ff; }
+    ]]></style>
+  </defs>
+
+  <rect x="20" y="60" width="180" height="80" class="stage"/>
+  <text x="110" y="100" text-anchor="middle" class="label">Patient spins</text>
+  <text x="110" y="125" text-anchor="middle" class="caption">Net magnetization</text>
+
+  <rect x="230" y="40" width="200" height="120" class="stage highlight"/>
+  <text x="330" y="90" text-anchor="middle" class="label">RF pulses +</text>
+  <text x="330" y="115" text-anchor="middle" class="label">gradient encoding</text>
+
+  <rect x="470" y="60" width="200" height="80" class="stage"/>
+  <text x="570" y="95" text-anchor="middle" class="label">Analog signal</text>
+  <text x="570" y="120" text-anchor="middle" class="caption">Receive coils</text>
+
+  <rect x="700" y="30" width="200" height="120" class="stage highlight"/>
+  <text x="800" y="75" text-anchor="middle" class="label">Sampled k-space</text>
+  <text x="800" y="100" text-anchor="middle" class="caption">Complex grid</text>
+
+  <rect x="700" y="170" width="200" height="80" class="stage"/>
+  <text x="800" y="207" text-anchor="middle" class="label">Image domain</text>
+  <text x="800" y="232" text-anchor="middle" class="caption">Inverse FFT</text>
+
+  <line x1="200" y1="100" x2="230" y2="100" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="430" y1="100" x2="470" y2="100" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="670" y1="100" x2="700" y2="100" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="800" y1="150" x2="800" y2="170" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <text x="330" y="190" text-anchor="middle" class="caption">FFT theory:</text>
+  <text x="330" y="212" text-anchor="middle" class="caption">k-space (freq) ⇄ image (space)</text>
+  <text x="570" y="190" text-anchor="middle" class="caption">Sequential: `07_mri_fft_sequential.py`</text>
+  <text x="570" y="212" text-anchor="middle" class="caption">Parallel: `07_mri_fft_parallel.py`</text>
+</svg>
