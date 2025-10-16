@@ -65,11 +65,21 @@ Resources:
 
 ## Why parallel computing matters
 
-Parallel computing lets you tackle simulations and datasets that exceed single-machine memory or time limits (higher-resolution PDEs, larger ML models, whole-genome analyses). Distributing work across many cores or nodes reduces wall-clock time, enabling quicker iterations and more experiments. This makes possible ensemble runs, uncertainty quantification, parameter sweeps, and higher-fidelity models that reveal phenomena single-node runs cannot.
+- Parallel computing lets you tackle simulations and datasets that exceed single-machine memory or time limits (higher-resolution PDEs, larger ML models, whole-genome analyses). 
 
-Using cluster resources effectively (many moderate-cost nodes) can be cheaper and more energy-efficient than a single oversized machine. Scalable pipelines and reproducible deployments on HPC clusters support multi-user workflows and reliable, automated processing in research environments.
+- Distributing work across many cores or nodes reduces wall-clock time, enabling quicker iterations and more experiments. 
+  
+- This makes possible ensemble runs, uncertainty quantification, parameter sweeps, and higher-fidelity models that reveal phenomena single-node runs cannot.
 
-Datasets and simulations now outgrow a single CPU core. Hardware roadmaps add cores, cache, and accelerators rather than higher clocks. Parallel workflows turn extra hardware into faster, reproducible results. Everyday laptops and desktops ship with multi-core CPUs, so modernizing code to exploit those cores is increasingly necessary.
+- Using cluster resources effectively (many moderate-cost nodes) can be cheaper and more energy-efficient than a single oversized machine. 
+
+- Scalable pipelines and reproducible deployments on HPC clusters support multi-user workflows and reliable, automated processing in research environments.
+
+- Datasets and simulations now outgrow a single CPU core. 
+
+- Hardware roadmaps add cores, cache, and accelerators rather than higher clocks. Parallel workflows turn extra hardware into faster, reproducible results. 
+
+- Everyday laptops and desktops ship with multi-core CPUs, so modernizing code to exploit those cores is increasingly necessary.
 
 
 ## Key Concepts

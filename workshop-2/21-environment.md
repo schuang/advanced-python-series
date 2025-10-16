@@ -26,11 +26,13 @@ Keep everything inside a virtual environment (`python -m venv .venv`) so upgrade
 4. Install PETSc/SLEPc (via package manager or source) and matching `petsc4py`/`slepc4py`.
 5. Verify with short MPI and PETSc test programs.
 
-The sections below give concrete commands for each operating system. 
+The sections below give concrete commands for each operating system.
 
 ---
 
 ## Installation
+
+To quickly and conveniently set up a development environment on your laptop computer:
 
 ```bash
 python -m venv .venv
@@ -39,6 +41,7 @@ pip install -U pip
 pip install mpi4py mpi4py-fft petsc petsc4py slepc slepc4py
 ```
 
+For production runs on HPC clusters, a more optimized installation should be considered.
 
 ---
 
@@ -99,13 +102,13 @@ Hello from rank 1 / 2
 ```
 
 ```bash
-$ mpirun -n 1 python tests/test_slepc.py 
+$ mpirun -n 1 python tests/test_slepc.py
 PETSc: (3, 24, 0)
 SLEPc: 3.24.0
 ```
 
 ```bash
-$ mpirun -n 1 python tests/test_tao.py 
+$ mpirun -n 1 python tests/test_tao.py
 TAO: lmvm available
 ```
 

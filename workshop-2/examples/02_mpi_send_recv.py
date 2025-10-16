@@ -1,4 +1,4 @@
-"""Point-to-point send/receive handshake across two ranks."""
+"""Point-to-point send/receive across two ranks."""
 
 from mpi4py import MPI
 
