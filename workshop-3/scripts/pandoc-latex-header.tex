@@ -1,0 +1,23 @@
+% Pandoc LaTeX header to enable graphicx and set default figure placement
+\usepackage{graphicx}
+\usepackage{grffile} % allow multi-dot filenames
+\usepackage{float}
+% Optionally adjust figure defaults
+\floatplacement{figure}{htbp}
+
+% Code block styling with light background
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\usepackage{framed}
+
+% Define light gray background color for code blocks
+\definecolor{shadecolor}{RGB}{248,248,248}
+
+% Ensure code blocks use the shaded background
+\let\oldShaded\Shaded
+\let\endoldShaded\endShaded
+\renewenvironment{Shaded}{%
+  \begin{snugshade}%
+}{%
+  \end{snugshade}%
+}
