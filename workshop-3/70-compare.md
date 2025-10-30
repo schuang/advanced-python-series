@@ -1,7 +1,5 @@
 # GPU Python Frameworks Comparison
 
-A comprehensive comparison of four major Python frameworks for GPU computing: Numba, CuPy, CUDA Python, and JAX. This guide helps you choose the right tool for your scientific computing needs.
-
 
 ## Comparison Matrix
 
@@ -488,7 +486,7 @@ result = process(data)
 - Less emphasis on traditional scientific computing
 - Sparse matrix support less mature than CuPy
 
-### Verdict: PyTorch as a CuPy/JAX Alternative
+### PyTorch as a CuPy/JAX Alternative?
 
 **PyTorch is a viable option when:**
 - You need automatic differentiation without committing to JAX's functional style
@@ -516,7 +514,7 @@ Many successful scientific computing projects use multiple frameworks:
 PyTorch can serve as a GPU-accelerated NumPy alternative, especially if you need automatic differentiation. However, it carries ML framework overhead that may be unnecessary for pure scientific computing. For most non-ML scientific computing, CuPy offers better ergonomics and performance, while JAX is superior for gradient-based research. PyTorch shines in the middle ground: scientific computing that benefits from gradients but doesn't fit JAX's functional paradigm, or when ML integration is valuable.
 
 
-## Detailed Discussion Points
+## Discussion
 
 ### Abstraction Level and Control
 
@@ -784,33 +782,7 @@ PyTorch can serve as a GPU-accelerated NumPy alternative, especially if you need
 - Easiest for distributed computing
 
 
-### Learning Path and Prerequisites
 
-**Numba Prerequisites:**
-- Python programming
-- Understanding of arrays and NumPy
-- Basic parallel programming concepts
-- CUDA concepts for GPU programming (threads, blocks, shared memory)
-
-**CuPy Prerequisites:**
-- Python programming
-- NumPy knowledge (primary requirement)
-- No GPU programming knowledge needed
-- Easiest learning curve
-
-**CUDA Python Prerequisites:**
-- Python programming
-- Strong CUDA C/C++ knowledge
-- Understanding of low-level GPU architecture
-- Experience with manual memory management
-- Steepest learning curve
-
-**JAX Prerequisites:**
-- Python programming
-- NumPy knowledge
-- Understanding of functional programming
-- Auto-differentiation concepts (for ML)
-- Mathematical background helpful
 
 
 ## Hybrid Approaches and Combinations
@@ -841,97 +813,6 @@ PyTorch can serve as a GPU-accelerated NumPy alternative, especially if you need
 **Example:** Scientific ML project with custom physics simulation (Numba), data processing (CuPy), and neural network training (JAX)
 
 
-## Decision Tree
-
-```
-Start: Do you need GPU acceleration?
-│
-├─ YES → Continue
-│
-└─ NO → Use NumPy/SciPy
-
-Do you need automatic differentiation?
-│
-├─ YES → Use JAX
-│   └─ JAX provides auto-diff + GPU acceleration
-│
-└─ NO → Continue
-
-Do you have existing NumPy code?
-│
-├─ YES → Can you express your algorithm with array operations?
-│   ├─ YES → Use CuPy (drop-in replacement)
-│   └─ NO → Does it have many Python loops?
-│       ├─ YES → Use Numba (@jit for CPU, @cuda.jit for GPU)
-│       └─ NO → Reconsider or use Numba
-│
-└─ NO → Continue
-
-Are you implementing a custom algorithm?
-│
-├─ YES → Do you understand parallel programming?
-│   ├─ YES → Use Numba (kernel programming in Python)
-│   └─ NO → Learn CuPy first, then Numba if needed
-│
-└─ NO → Continue
-
-Do you need low-level CUDA API access?
-│
-├─ YES → Are you a CUDA expert?
-│   ├─ YES → Use CUDA Python
-│   └─ NO → Use Numba instead (easier)
-│
-└─ NO → Use CuPy or Numba
-
-Are you building a framework/library?
-│
-├─ YES → Use CUDA Python (maximum control)
-│
-└─ NO → Use CuPy (convenience) or Numba (custom algorithms)
-```
-
-
-## Summary Recommendations
-
-### For Data Scientists and Analysts
-**Primary Choice: CuPy**
-- Minimal learning curve from NumPy
-- Rapid prototyping and development
-- Excellent for exploratory work
-- Fall back to Numba for custom operations
-
-### For Scientific Computing Researchers
-**Primary Choice: Numba or JAX**
-- Numba: Custom simulations and algorithms
-- JAX: Gradient-based methods and optimization
-- Both provide excellent performance with reasonable effort
-
-### For Machine Learning Engineers
-**Primary Choice: JAX**
-- Auto-differentiation is essential
-- Functional programming fits ML workflows
-- Excellent multi-device support
-- Use CuPy for data preprocessing
-
-### For Performance Engineers
-**Primary Choice: CUDA Python or Numba**
-- CUDA Python: Maximum control, integrating existing CUDA code
-- Numba: Good balance of control and productivity
-- Both allow fine-tuning for maximum performance
-
-### For Library Developers
-**Primary Choice: CUDA Python**
-- Need access to low-level CUDA APIs
-- Building abstractions for others
-- Require programmatic GPU resource management
-- Maximum flexibility for framework building
-
-### For Beginners to GPU Computing
-**Primary Choice: CuPy**
-- Easiest entry point from NumPy
-- Success without understanding GPU details
-- Build intuition about GPU acceleration
-- Graduate to Numba/JAX as needs grow
 
 
 ## Conclusion

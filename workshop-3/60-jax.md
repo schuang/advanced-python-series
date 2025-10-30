@@ -11,7 +11,7 @@ JAX provides a powerful framework for numerical computing with automatic differe
 
 - **NumPy-Compatible API**: Familiar `jax.numpy` interface for array operations
 - **Automatic Differentiation**: Built-in gradient computation with `grad`, `vjp`, `jvp`
-- **JIT Compilation**: XLA compiler produces optimized code for CPU, GPU, TPU
+- **JIT Compilation**: XLA compiler produces optimized code for **CPU, GPU, TPU**
 - **Functional Programming**: Pure functions enable powerful transformations
 - **Composable Transformations**: Combine `jit`, `grad`, `vmap`, `pmap` freely
 
@@ -24,7 +24,7 @@ JAX provides a powerful framework for numerical computing with automatic differe
 - Growing ecosystem for scientific computing and ML
 
 
-## Brief History
+## History
 
 JAX was developed by Google Research and emerged from the machine learning research community's need for flexible automatic differentiation.
 
@@ -74,7 +74,7 @@ JAX is maintained by Google Research and has become essential infrastructure for
 - AMD GPUs: Experimental ROCm support
 
 
-## Key Use Cases in Scientific Computing
+## Use Cases
 
 JAX has become essential in domains requiring gradients, optimization, and high-performance computing.
 
@@ -121,6 +121,7 @@ Simulations requiring gradients benefit from JAX's autodiff capabilities.
 - Quantum many-body systems
 - Variational Monte Carlo
 - Hamiltonian mechanics
+- Compressible flows
 
 ### 5. **Bayesian Inference**
 
@@ -147,7 +148,7 @@ Large-scale simulations benefit from JAX's easy multi-GPU/TPU parallelization.
 
 ## Functional Programming Model
 
-JAX requires pure functions for its transformations to work correctly. This is a fundamental difference from NumPy.
+JAX requires **pure functions** for its transformations to work correctly. This is a fundamental difference from NumPy.
 
 ### Pure Functions
 
@@ -268,6 +269,22 @@ result = fast_function(x)  # Uses cached version
 - Numerical computations
 - Inner loops in algorithms
 - After verifying correctness (debug without jit first)
+
+**JAX vs Numba JIT Compilation:**
+
+| Aspect | JAX | Numba |
+|--------|-----|-------|
+| **Compiler** | XLA (Google) | LLVM |
+| **Compilation Trigger** | Shape + dtype | Type signature |
+| **Tracing** | Traces Python to XLA IR | Compiles Python bytecode |
+| **Re-compilation** | Per shape change | Per type change |
+| **Target** | CPU/GPU/TPU | CPU/GPU (CUDA) |
+| **Automatic Differentiation** | Yes (built-in) | No |
+| **First Call** | Slow (compilation overhead) | Slow (compilation overhead) |
+| **Subsequent Calls** | Fast (cached) | Fast (cached) |
+
+Both JAX and Numba perform **just-in-time (JIT) compilation at runtime**, not ahead-of-time compilation. The first call to a JIT-decorated function triggers compilation, which is then cached for reuse.
+
 
 ### grad: Automatic Differentiation
 
@@ -431,8 +448,6 @@ def parallel_sum(x):
 
 ### Composing Transformations
 
-**Power of Composition:**
-
 JAX transformations compose naturally:
 
 ```python
@@ -450,58 +465,11 @@ complex = jax.grad(jax.jit(jax.vmap(f)))
 ```
 
 
-## Random Numbers
-
-JAX uses explicit random state for reproducibility and parallelization.
-
-**Why Explicit State:**
-
-- Functional purity requires explicit state
-- Enables parallelization without race conditions
-- Reproducible across devices
-- Follows functional programming principles
-
-**Usage:**
-
-```python
-import jax
-import jax.numpy as jnp
-
-# Create random key (seed)
-key = jax.random.PRNGKey(0)
-
-# Split key for independent randomness
-key, subkey = jax.random.split(key)
-
-# Generate random numbers
-random_array = jax.random.normal(subkey, shape=(1000,))
-
-# Split again for next random operation
-key, subkey = jax.random.split(key)
-another_array = jax.random.uniform(subkey, shape=(100,))
-```
-
-**Multiple Splits:**
-
-```python
-# Split into many keys at once
-key, *subkeys = jax.random.split(key, num=10)
-
-# Use each subkey for independent randomness
-arrays = [jax.random.normal(sk, (100,)) for sk in subkeys]
-```
-
-**Why Not Global State:**
-
-- Global RNG state breaks functional purity
-- Cannot safely parallelize
-- Different devices would interfere
-- Explicit keys ensure reproducibility
 
 
 ## Examples
 
-### Example 1: Gradient-Based Optimization
+### Gradient-Based Optimization
 
 Demonstrates JAX's core strength: automatic differentiation for optimization.
 
@@ -569,7 +537,7 @@ print(f"Optimum at [1, 1]: {rosenbrock(jnp.array([1.0, 1.0])):.6f}")
 - JIT compilation: 10-100x speedup
 - Scales to high-dimensional problems
 
-### Example 2: Physics-Informed Neural Network
+### Physics-Informed Neural Network
 
 Demonstrates JAX's power for scientific computing with automatic differentiation.
 
@@ -726,7 +694,7 @@ y = jnp.sum(x ** 2)
 **Not ideal for:**
 
 - Simple NumPy operations (use CuPy)
-- Code with many side effects
+- Code with many side effects (need to refactor/revise)
 - Heavy I/O operations
 - When you don't need gradients
 
@@ -889,12 +857,5 @@ except:
 - **CUDA Python**: Low-level GPU control
 - **PyTorch**: Standard deep learning
 
-**Learning Path:**
-
-1. Learn NumPy if you haven't already
-2. Understand functional programming basics
-3. Master `jit` and `grad` first
-4. Then explore `vmap` and `pmap`
-5. Apply to your domain (ML, physics, optimization)
 
 JAX bridges the gap between high-level NumPy-style programming and high-performance computing with automatic differentiation, making it ideal for gradient-based scientific computing and machine learning research.

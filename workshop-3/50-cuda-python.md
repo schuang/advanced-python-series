@@ -88,40 +88,22 @@ CUDA Python is maintained by NVIDIA and represents the company's commitment to m
 - Supports external memory and semaphore sharing
 
 
-## Key Use Cases in Scientific Computing
+##  Use Cases 
 
-### 1. **Custom GPU Resource Management**
-When you need precise control over GPU memory, streams, and execution flow beyond what high-level libraries provide. Ideal for implementing custom memory pools, scheduling strategies, or multi-GPU coordination.
+- Custom GPU Resource Management: Building custom task schedulers, implementing memory-efficient algorithms, multi-GPU workload distribution
 
-Example: Building custom task schedulers, implementing memory-efficient algorithms, multi-GPU workload distribution
+- Integrating Existing CUDA C/C++ Code: Wrapping proprietary CUDA libraries, using vendor-optimized kernels, migrating legacy CUDA applications
 
-### 2. **Integrating Existing CUDA C/C++ Code**
-Loading and executing pre-compiled CUDA kernels (PTX or cubin) from Python without rewriting in Numba or CuPy. Useful for leveraging existing CUDA codebases or using highly optimized vendor-provided kernels.
+- Advanced Performance Optimization: Overlapping computation and memory transfers, multi-stream execution, custom profiling and timing
 
-Example: Wrapping proprietary CUDA libraries, using vendor-optimized kernels, migrating legacy CUDA applications
+- Low-Level Algorithm Implementation: Custom ray tracing kernels, advanced image processing with texture memory, lock-free data structures
 
-### 3. **Advanced Performance Optimization**
-Fine-tuning performance through explicit stream management, memory transfers, and kernel launch configurations. When library defaults aren't sufficient and you need manual optimization.
+- Framework Development: Developing domain-specific GPU libraries, building workflow engines, creating custom array libraries
 
-Example: Overlapping computation and memory transfers, multi-stream execution, custom profiling and timing
-
-### 4. **Low-Level Algorithm Implementation**
-Implementing algorithms that require direct manipulation of GPU features not exposed by higher-level libraries, such as texture memory, surface memory, or complex synchronization patterns.
-
-Example: Custom ray tracing kernels, advanced image processing with texture memory, lock-free data structures
-
-### 5. **Framework Development**
-Building higher-level GPU computing frameworks or libraries that need to manage GPU resources programmatically. CUDA Python provides the foundation for creating custom abstractions.
-
-Example: Developing domain-specific GPU libraries, building workflow engines, creating custom array libraries
-
-### 6. **Multi-GPU and Distributed Computing**
-Implementing sophisticated multi-GPU algorithms with explicit peer-to-peer transfers, unified virtual addressing, and cross-device synchronization that automated tools don't provide.
-
-Example: Multi-GPU molecular dynamics, distributed deep learning, multi-GPU linear solvers
+- Multi-GPU and Distributed Computing: Multi-GPU molecular dynamics, distributed deep learning, multi-GPU linear solvers
 
 
-## CUDA Python vs CuPy: Key Differences
+## CUDA Python vs CuPy
 
 Understanding the fundamental differences helps you choose the right tool for your needs.
 
@@ -164,7 +146,7 @@ b = a + 5  # Operations execute automatically on GPU
 
 ### Use Case Comparison
 
-**CUDA Python - Choose When:**
+**CUDA Python**
 
 - You need low-level control over GPU resources
 - Integrating existing CUDA C/C++ code
@@ -173,7 +155,7 @@ b = a + 5  # Operations execute automatically on GPU
 - Performance tuning requires explicit stream/memory control
 - You're a CUDA expert wanting Python bindings
 
-**CuPy - Choose When:**
+**CuPy**
 
 - You have NumPy code to accelerate
 - You want array-level operations
@@ -266,42 +248,10 @@ with cuda.Stream() as stream:
 ```
 
 **Hardware Requirements:**
+
 - NVIDIA GPU with CUDA support (Compute Capability 3.0+)
 - CUDA Toolkit installed (version 11.2 or later recommended)
 - Compatible with all CUDA-capable NVIDIA GPUs
 
-
-## Vector Addition Example
-
-**Overview:**
-
-- Demonstrates loading and executing a pre-compiled CUDA kernel
-- Shows explicit memory management and kernel launch
-- Illustrates the low-level nature of CUDA Python
-
-**Key Concepts Covered:**
-
-- Module loading (PTX or cubin)
-- Device memory allocation
-- Host-to-device and device-to-host memory transfers
-- Explicit kernel launch with grid/block configuration
-- Stream management and synchronization
-
-**Key Differences from CuPy:**
-
-- Requires pre-compiled kernel code (PTX/cubin) or runtime compilation
-- Explicit memory allocation with `cuMemAlloc()`
-- Manual memory copies with `cuMemcpyHtoD()` and `cuMemcpyDtoH()`
-- Explicit kernel launch with `cuLaunchKernel()`
-- More code, but complete control over execution
-
-**Key Differences from Numba:**
-
-- Uses pre-compiled kernels rather than JIT compilation
-- More verbose setup and memory management
-- Direct access to driver/runtime APIs
-- Suitable for integrating existing CUDA code
-
-See `examples/vecadd-cuda-python.py` for complete implementation.
 
 **Note:** CUDA Python is typically used when you need the lowest-level access or are integrating existing CUDA C/C++ code. For most scientific computing tasks, CuPy or Numba provide better productivity while CUDA Python excels at framework development and custom optimization.
