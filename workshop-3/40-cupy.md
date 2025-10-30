@@ -16,11 +16,7 @@ Key advantages:
 - Excellent interoperability with other GPU libraries
 
 
-## Brief History
-
-CuPy was initially developed by Preferred Networks, a Japanese AI and robotics company, and first released in 2015. The project aimed to bring NumPy's ease of use to GPU computing for deep learning and scientific applications.
-
-Key milestones:
+## History
 
 - **2015**: Initial release as an open-source project
 - **2017**: Added comprehensive SciPy compatibility
@@ -90,7 +86,7 @@ import cupy as cp
 import numpy as np
 
 # CuPy uses a memory pool by default
-mempool = cp.get_default_memory_pool()
+mempool = cp.get_default_memory_pool()        # GPU memory
 
 # Check memory usage before allocation
 print(f"Used memory: {mempool.used_bytes() / 1e9:.2f} GB")
@@ -126,13 +122,30 @@ print(f"After free_all_blocks - Total: {mempool.total_bytes() / 1e9:.2f} GB")
 ```python
 import cupy as cp
 
-# Create custom memory pool with size limit (4 GB)
+# Create custom memory pool using Unified Memory (managed memory)
 pool = cp.cuda.MemoryPool(cp.cuda.malloc_managed)
 cp.cuda.set_allocator(pool.malloc)
 
 # Or disable memory pool entirely
 cp.cuda.set_allocator(cp.cuda.malloc)
 ```
+
+
+Default CuPy Memory Pool (`cp.cuda.malloc`):
+
+- GPU-only device memory
+- Best performance for pure GPU computation
+- Requires explicit CPU↔GPU transfers
+- Recommended for most use cases
+
+
+Managed Memory Pool (`cp.cuda.malloc_managed`):
+
+- Unified Memory accessible from CPU and GPU
+- Automatic data migration
+- Simpler programming model
+- Potential performance overhead
+- Use for CPU-GPU interop or prototyping
 
 
 ## Custom Kernels
@@ -269,7 +282,7 @@ with cp.fuse():
     result = (x * 2.0 + y * 3.0) / (x + y + 1.0)
     cp.cuda.Stream.null.synchronize()
 
-# Without fusion (for comparison)
+# Without fusion (for comparison): launches multiple kernels
 result_unfused = (x * 2.0 + y * 3.0) / (x + y + 1.0)
 
 print(f"Results match: {cp.allclose(result, result_unfused)}")
@@ -365,7 +378,7 @@ with cp.cuda.Device(0):
 - Results need explicit transfer between GPUs or CPU
 
 
-## No Multi-Core Support
+## No Multi-Core CPU Support
 
 CuPy is fundamentally a GPU-accelerated library and does NOT have native multi-core CPU parallelization capabilities.
 
@@ -468,7 +481,7 @@ CuPy seamlessly exchanges data with other GPU libraries through standard protoco
 
 ### DLPack: Zero-Copy Exchange
 
-**Example: CuPy ↔ PyTorch**
+**Example: CuPy-PyTorch**
 
 ```python
 import cupy as cp
@@ -495,7 +508,7 @@ print(f"Zero-copy: same memory? {cupy_array.data.ptr == torch_tensor.data_ptr()}
 
 ### CUDA Array Interface
 
-**Example: CuPy ↔ Numba**
+**Example: CuPy-Numba**
 
 ```python
 import cupy as cp
@@ -525,203 +538,6 @@ print(f"First elements: {cupy_array[:5]}")  # [0, 2, 4, 6, 8]
 - No format conversion overhead
 - Seamless integration across libraries
 
-
-## SciPy Compatibility
-
-CuPy provides GPU-accelerated versions of many SciPy functions.
-
-**Example: Signal Processing with cupy.scipy**
-
-```python
-import cupy as cp
-import numpy as np
-import scipy.signal
-import time
-
-# Create a signal
-n = 10000000
-t = cp.linspace(0, 1, n, dtype=cp.float32)
-signal = cp.sin(2 * cp.pi * 50 * t) + cp.sin(2 * cp.pi * 120 * t)
-
-# GPU: FFT-based convolution
-kernel = cp.ones(1000, dtype=cp.float32) / 1000  # Moving average
-start = time.time()
-result_gpu = cp.scipy.signal.convolve(signal, kernel, mode='same', method='fft')
-cp.cuda.Stream.null.synchronize()
-gpu_time = time.time() - start
-
-# CPU: For comparison (using smaller dataset)
-n_cpu = 1000000
-t_cpu = np.linspace(0, 1, n_cpu, dtype=np.float32)
-signal_cpu = np.sin(2 * np.pi * 50 * t_cpu) + np.sin(2 * np.pi * 120 * t_cpu)
-kernel_cpu = np.ones(1000, dtype=np.float32) / 1000
-
-start = time.time()
-result_cpu = scipy.signal.convolve(signal_cpu, kernel_cpu, mode='same', method='fft')
-cpu_time = time.time() - start
-
-print(f"GPU time (10M samples): {gpu_time:.3f}s")
-print(f"CPU time (1M samples): {cpu_time:.3f}s")
-print(f"GPU processing 10x more data in less time!")
-```
-
-**Available cupy.scipy modules:**
-
-- `cupy.scipy.fft`: Fast Fourier transforms
-- `cupy.scipy.linalg`: Linear algebra
-- `cupy.scipy.ndimage`: Image processing
-- `cupy.scipy.signal`: Signal processing
-- `cupy.scipy.sparse`: Sparse matrices
-- `cupy.scipy.special`: Special functions
-
-
-## Stream Management
-
-CUDA streams allow overlapping computation and memory transfers for better performance.
-
-**Example: Concurrent Kernel Execution with Streams**
-
-```python
-import cupy as cp
-import time
-
-# Create multiple streams
-stream1 = cp.cuda.Stream()
-stream2 = cp.cuda.Stream()
-
-# Prepare data
-n = 5000000
-a1 = cp.random.randn(n, dtype=cp.float32)
-b1 = cp.random.randn(n, dtype=cp.float32)
-a2 = cp.random.randn(n, dtype=cp.float32)
-b2 = cp.random.randn(n, dtype=cp.float32)
-
-# Sequential execution (default stream)
-start = time.time()
-result1 = a1 * b1 + cp.sin(a1)
-result2 = a2 * b2 + cp.sin(a2)
-cp.cuda.Stream.null.synchronize()
-sequential_time = time.time() - start
-
-# Concurrent execution using streams
-start = time.time()
-with stream1:
-    result1_stream = a1 * b1 + cp.sin(a1)
-with stream2:
-    result2_stream = a2 * b2 + cp.sin(a2)
-
-# Wait for both streams
-stream1.synchronize()
-stream2.synchronize()
-concurrent_time = time.time() - start
-
-print(f"Sequential time: {sequential_time:.3f}s")
-print(f"Concurrent time: {concurrent_time:.3f}s")
-print(f"Speedup: {sequential_time/concurrent_time:.2f}x")
-
-# Verify results
-print(f"Results match: {cp.allclose(result1, result1_stream)}")
-```
-
-**Use cases:**
-
-- Overlapping computation on independent data
-- Hiding memory transfer latency
-- Pipeline processing
-
-
-## Performance Tips
-
-Best practices for optimizing CuPy code.
-
-**Example: Performance Optimization Techniques**
-
-```python
-import cupy as cp
-import time
-
-n = 10000
-m = 10000
-
-# 1. Use appropriate dtypes (float32 often faster than float64)
-a_64 = cp.random.randn(n, m, dtype=cp.float64)
-b_64 = cp.random.randn(n, m, dtype=cp.float64)
-
-start = time.time()
-c_64 = a_64 @ b_64
-cp.cuda.Stream.null.synchronize()
-time_64 = time.time() - start
-
-a_32 = cp.random.randn(n, m, dtype=cp.float32)
-b_32 = cp.random.randn(n, m, dtype=cp.float32)
-
-start = time.time()
-c_32 = a_32 @ b_32
-cp.cuda.Stream.null.synchronize()
-time_32 = time.time() - start
-
-print(f"float64: {time_64:.3f}s")
-print(f"float32: {time_32:.3f}s")
-print(f"float32 speedup: {time_64/time_32:.2f}x")
-
-# 2. Avoid unnecessary CPU-GPU transfers
-def bad_practice():
-    """Slow: many CPU-GPU transfers"""
-    result = 0
-    for i in range(100):
-        a = cp.random.randn(1000)
-        result += float(cp.sum(a))  # Transfer per iteration
-    return result
-
-def good_practice():
-    """Fast: minimize transfers"""
-    results = []
-    for i in range(100):
-        a = cp.random.randn(1000)
-        results.append(cp.sum(a))
-    # Single transfer at end
-    return float(sum([r.get() for r in results]))
-
-start = time.time()
-_ = bad_practice()
-bad_time = time.time() - start
-
-start = time.time()
-_ = good_practice()
-good_time = time.time() - start
-
-print(f"\nBad practice: {bad_time:.3f}s")
-print(f"Good practice: {good_time:.3f}s")
-print(f"Speedup: {bad_time/good_time:.2f}x")
-
-# 3. Use in-place operations when possible
-a = cp.random.randn(5000, 5000, dtype=cp.float32)
-
-# Allocates new array
-start = time.time()
-b = a * 2.0
-cp.cuda.Stream.null.synchronize()
-time_new = time.time() - start
-
-# In-place operation (faster)
-start = time.time()
-a *= 2.0
-cp.cuda.Stream.null.synchronize()
-time_inplace = time.time() - start
-
-print(f"\nNew array: {time_new:.3f}s")
-print(f"In-place: {time_inplace:.3f}s")
-print(f"In-place speedup: {time_new/time_inplace:.2f}x")
-```
-
-**Key Performance Tips:**
-
-- Use `float32` when `float64` precision not needed
-- Minimize CPU-GPU data transfers
-- Use in-place operations (`+=`, `*=`, etc.)
-- Keep data on GPU as long as possible
-- Use memory pools for frequent allocations
-- Profile with `cp.cuda.profiler` or `nvprof`
 
 
 ## Examples
@@ -839,12 +655,6 @@ print(f"Max difference: {np.max(np.abs(c_numpy - c_cupy))}")
 - **Synchronization**: `synchronize()` ensures GPU finishes before timing
 - **Transfer overhead**: For small operations, transfer time can dominate
 
-**Performance Insights:**
-
-- **CPU (NumPy)**: Single-threaded execution, baseline performance
-- **GPU (CuPy)**: Parallel execution can be 10-100x faster for large arrays
-- **With transfers**: Memory transfer overhead can be significant for small operations
-- **Best gains**: When data stays on GPU across multiple operations
 
 **When CuPy Shines:**
 
@@ -867,21 +677,14 @@ e_gpu = cp.sin(d_gpu)
 result = cp.asnumpy(e_gpu)  # Transfer once at end
 ```
 
-See `src/vecadd-cupy.py` for complete implementation.
-
 
 ### Example 2: Matrix Multiplication (cuBLAS Performance)
 
-Matrix multiplication showcases CuPy's ability to leverage highly optimized CUDA libraries with zero effort.
 
-**Problem:**
 Large-scale matrix multiplication is fundamental to scientific computing, appearing in linear algebra, deep learning, physics simulations, and data analysis. CuPy makes it trivial to accelerate this operation.
 
-**Why This Highlights CuPy's Strengths:**
-
-- **One-line change**: `numpy` → `cupy`
+- **One-line change**: `numpy` $\rightarrow$ `cupy`
 - **cuBLAS library**: Uses NVIDIA's highly optimized BLAS implementation
-- **Dramatic speedup**: Often 50-200x faster with no code complexity
 - **Perfect for CuPy**: Standard operation where libraries beat custom kernels
 
 **Implementation:**
@@ -898,7 +701,7 @@ def benchmark_matmul(size, dtype=np.float32):
     print(f"Matrix Multiplication: {size}x{size} ({dtype.__name__})")
     print(f"{'='*60}")
 
-    # NumPy (CPU) version
+    # ------------ NumPy (CPU) version --------------
     print("\nNumPy (CPU):")
     print("-" * 40)
 
@@ -921,7 +724,7 @@ def benchmark_matmul(size, dtype=np.float32):
     print(f"Memory per matrix: {memory_mb:.1f} MB")
     print(f"Performance: {cpu_gflops:.1f} GFLOPS")
 
-    # CuPy (GPU) version
+    # ---------- CuPy (GPU) version ---------------  
     print("\nCuPy (GPU):")
     print("-" * 40)
 

@@ -250,5 +250,3 @@ blocks = (data.size + threads - 1) // threads
 custom_process[blocks, threads](result)  # Works directly with CuPy array!
 ```
 
-**Details:** Each framework document (30/40/50/60) covers interoperability
-

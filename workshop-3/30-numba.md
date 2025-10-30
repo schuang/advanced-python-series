@@ -15,7 +15,7 @@ Numba is particularly effective for:
 - Parallel algorithms that can leverage multiple CPU cores or GPU devices
 
 
-## Brief History
+## History
 
 Numba was created by Travis Oliphant, founder of NumPy and Anaconda, and was first released in 2012. The project emerged from the need to accelerate scientific Python code without requiring developers to write C extensions or Cython.
 
@@ -41,6 +41,9 @@ Numba is now maintained by Anaconda Inc. and has become a core component of the 
 
 - Decorators: `@jit`, `@cuda.jit` trigger compilation
 - Reads Python bytecode + analyzes input argument types
+- Compilation pipeline: **Python $\rightarrow$ LLVM IR $\rightarrow$ Machine code**
+  - LLVM IR = Intermediate Representation (platform-independent assembly-like code)
+  - Enables optimization and portability across different CPUs/GPUs
 - Uses LLVM compiler library for optimization
 - Generates native machine code for target CPU or GPU
 
@@ -53,44 +56,27 @@ Numba is now maintained by Anaconda Inc. and has become a core component of the 
 **GPU Target Support:**
 
 - Supports NVIDIA CUDA GPU programming
+    - No AMD GPU support
 - Write parallel code in pure Python syntax
 - Compiles restricted Python subset to CUDA kernels
 - Manages CUDA execution model (threads, blocks, grid)
 
 
-## Key Use Cases in Scientific Computing
+## Use Cases
 
 Numba has become essential in many scientific computing domains where Python's ease of use needs to be combined with high performance:
 
-### 1. **Numerical Simulations**
-Physics simulations, climate modeling, and molecular dynamics often require intensive numerical computations over large arrays. Numba accelerates these operations by compiling time-stepping algorithms and differential equation solvers to native code.
+- Numerical Simulations: N-body simulations, finite element analysis, computational fluid dynamics
 
-Example: N-body simulations, finite element analysis, computational fluid dynamics
+- Signal and Image Processing: Custom FFT implementations, wavelet transforms, medical image analysis
 
-### 2. **Signal and Image Processing**
-Custom convolution operations, filtering algorithms, and image transformations can be accelerated dramatically. Numba enables researchers to implement novel algorithms with high performance, particularly when custom kernels are needed.
+- Monte Carlo Methods: Financial risk analysis, quantum Monte Carlo, Bayesian inference
 
-Example: Custom FFT implementations, wavelet transforms, medical image analysis
+- Machine Learning and AI: Custom gradient computations, reinforcement learning environments, graph neural networks
 
-### 3. **Monte Carlo Methods**
-Statistical simulations requiring millions of random trials benefit enormously from Numba's ability to parallelize random number generation and accumulation operations.
+- Computational Biology: BLAST-like algorithms, gene expression analysis, population genetics simulations
 
-Example: Financial risk analysis, quantum Monte Carlo, Bayesian inference
-
-### 4. **Machine Learning and AI**
-Numba is valuable for custom loss functions, specialized data preprocessing, and implementing research algorithms not yet available in standard libraries.
-
-Example: Custom gradient computations, reinforcement learning environments, graph neural networks
-
-### 5. **Computational Biology**
-Sequence alignment algorithms, phylogenetic tree construction, and protein folding simulations often involve nested loops over large datasets that Numba can optimize.
-
-Example: BLAST-like algorithms, gene expression analysis, population genetics simulations
-
-### 6. **Optimization Problems**
-Custom optimization routines, gradient-free methods, and constraint solvers can be implemented efficiently with Numba, especially when problem-specific heuristics are needed.
-
-Example: Genetic algorithms, particle swarm optimization, linear programming solvers
+- Optimization Problems: Genetic algorithms, particle swarm optimization, linear programming solvers
 
 
 ## Compilation Modes
@@ -99,9 +85,7 @@ Numba offers different compilation modes that balance performance and compatibil
 
 ### Nopython Mode
 
-**What it is:**
-
-- The compiled code runs entirely without the Python interpreter
+- The compiled code runs entirely **without the Python interpreter**
 - Maximum performance - executes at native machine code speed
 - No Python object overhead
 - Enabled by default with `@jit` or explicitly with `@jit(nopython=True)`
@@ -133,8 +117,6 @@ def compute_sum(arr):
 ```
 
 ### Object Mode
-
-**What it is:**
 
 - Falls back to Python interpreter for unsupported operations
 - Allows use of arbitrary Python objects and libraries
@@ -178,10 +160,8 @@ def mixed_function(arr):
 
 ### Type Specialization
 
-**How it works:**
-
 - Numba compiles a separate version of the function for each unique combination of input types
-- First call with specific types triggers compilation
+- First call with specific types triggers compilation (at runtime)
 - Subsequent calls with same types use cached compiled version
 - Different type combinations trigger new compilations
 
@@ -222,8 +202,6 @@ result3 = add_arrays(z, z)  # New compilation for int32
 
 ### Compilation Caching to Disk
 
-**What it does:**
-
 - Saves compiled machine code to disk
 - Eliminates compilation overhead on subsequent program runs
 - Enabled with `cache=True` parameter
@@ -263,13 +241,11 @@ def expensive_computation(n):
 - Particularly valuable for large GPU kernels
 
 
-## Vectorization Decorators
+## Vectorization
 
 Numba provides high-level decorators that automatically parallelize functions across array elements without writing explicit loops or kernels.
 
 ### @vectorize Decorator
-
-**What it does:**
 
 - Converts scalar functions into universal functions (ufuncs)
 - Automatically applies the function to each element of arrays
@@ -323,14 +299,13 @@ result = gpu_add(x, y)
 
 ### @guvectorize Decorator
 
-**What it does:**
-
 - Generalized universal functions (gufuncs)
 - Operates on subarrays rather than scalars
 - Supports reduction operations and complex array manipulations
 - More flexible than `@vectorize`
 
-**Example - Moving Average:**
+**Example: Moving Average:**
+
 ```python
 from numba import guvectorize
 import numpy as np
@@ -356,7 +331,9 @@ moving_average(data, window, result)
 
 - Function signature: type specification
 - Layout signature: input/output dimensions
-- Example: `'(n),(m)->(n,m)'` means two 1D inputs produce a 2D output
+- `'(n),()->(n)'` means:
+    - input: 1D array of length n, scalar (0-dimensional)
+    - output: 1D array of length n
 
 **Use cases:**
 
@@ -373,8 +350,6 @@ Numba can automatically parallelize code across multiple CPU cores, similar to S
 ### Automatic Parallelization with parallel=True
 
 Numba can automatically identify parallel loops and distribute iterations across CPU cores.
-
-**Example: Automatic Loop Parallelization**
 
 ```python
 from numba import jit
@@ -433,8 +408,6 @@ print(f"Results match: {np.allclose(result_seq, result_par)}")
 
 For more control, use `prange` (parallel range) to explicitly mark loops for parallelization.
 
-**Example: Explicit Parallel Range**
-
 ```python
 from numba import jit, prange
 import numpy as np
@@ -471,14 +444,13 @@ print(f"Utilized {np.ceil(n / 1e6 / elapsed):.0f}M operations/second")
 
 - `range`: Sequential execution
 - `prange`: Parallel execution across CPU cores
+    - similiar to OpenMP's "parallel for"
 - Only use `prange` when iterations are independent
 - Numba handles thread creation and synchronization
 
 ### Parallel Reductions
 
 Numba can parallelize reduction operations (sum, mean, etc.) automatically.
-
-**Example: Parallel Reduction**
 
 ```python
 from numba import jit, prange
@@ -572,6 +544,15 @@ print(f"Throughput: {m*n/elapsed/1e6:.1f} Million ops/sec")
 - Only parallelize one level to avoid overhead
 - Ensure sufficient work per thread (avoid too fine-grained parallelism)
 
+Or vectorize the inner loop:
+
+```python
+# Outer loop parallelized
+    for i in prange(m):
+        # Inner operation vectorized (NumPy)
+        C[i, :] = np.sqrt(A[i, :]**2 + B[i, :]**2)
+```
+
 ### When to Use Multi-Core Parallelization
 
 **Good candidates for parallel=True:**
@@ -588,7 +569,7 @@ print(f"Throughput: {m*n/elapsed/1e6:.1f} Million ops/sec")
 - Memory-bound operations (already limited by bandwidth)
 - Very simple operations (addition, copying)
 
-**Example: Comparing Sequential vs Parallel Performance**
+**Sequential vs Parallel Performance**
 
 ```python
 from numba import jit, prange
@@ -644,8 +625,6 @@ benchmark_sizes()
 
 You can control the number of threads Numba uses for parallel execution.
 
-**Example: Setting Thread Count**
-
 ```python
 from numba import jit, prange, set_num_threads, get_num_threads
 import numpy as np
@@ -689,8 +668,6 @@ for nthreads in [1, 2, 4, 8]:
 ### Parallel NumPy Operations
 
 Numba automatically parallelizes many NumPy operations when `parallel=True`.
-
-**Example: Automatic NumPy Parallelization**
 
 ```python
 from numba import jit
@@ -759,11 +736,20 @@ print(f"Time with automatic parallelization: {elapsed:.3f}s")
 - Test with different thread counts to find optimum
 
 
-## CPU and GPU Code Portability
+## CPU and GPU Code Adaptation
 
-One of Numba's most powerful features is the ability to write code once and run it efficiently on both CPU and GPU with minimal changes.
+Numba enables Python developers to write GPU code without learning CUDA C/C++. While CPU and GPU versions require different code (due to different execution models), the core algorithm logic remains in Python, making the adaptation straightforward.
 
-### Same Algorithm, Different Targets
+### Adapting Algorithms Between CPU and GPU
+
+**What changes:**
+- CPU uses loop-based execution (`@jit`)
+- GPU uses thread-based execution (`@cuda.jit` with thread indexing)
+
+**What stays the same:**
+- Python syntax
+- Core mathematical operations
+- Algorithm logic
 
 **CPU Version with @jit:**
 ```python
@@ -772,6 +758,7 @@ import numpy as np
 
 @jit(nopython=True)
 def matrix_multiply_cpu(A, B, C):
+    # Loop-based: iterate sequentially or in parallel
     for i in range(A.shape[0]):
         for j in range(B.shape[1]):
             for k in range(A.shape[1]):
@@ -784,55 +771,62 @@ from numba import cuda
 
 @cuda.jit
 def matrix_multiply_gpu(A, B, C):
-    i, j = cuda.grid(2)
+    # Thread-based: each thread handles one output element
+    i, j = cuda.grid(2)  # Get thread position
     if i < C.shape[0] and j < C.shape[1]:
         tmp = 0.0
         for k in range(A.shape[1]):
-            tmp += A[i, k] * B[k, j]
+            tmp += A[i, k] * B[k, j]  # Same computation!
         C[i, j] = tmp
 ```
 
-### Automatic Target Selection with @vectorize
+**Key difference:** Loop iteration (`for i in range(...)`) becomes thread indexing (`i, j = cuda.grid(2)`), but the mathematical operations `A[i, k] * B[k, j]` remain identical.
 
-The most portable approach uses `@vectorize` with automatic target selection:
+### True Portability with @vectorize
+
+For **genuine write-once, run-anywhere code**, use `@vectorize` where you can switch hardware targets by simply changing one parameter:
 
 ```python
 from numba import vectorize
 import numpy as np
 
-# Define once, works on CPU and GPU
-@vectorize(['float64(float64, float64)'], target='parallel')
+# Define the function once
+@vectorize(['float64(float64, float64)'], target='cpu')  # Single-threaded CPU
+# @vectorize(['float64(float64, float64)'], target='parallel')  # Multi-core CPU
+# @vectorize(['float64(float64, float64)'], target='cuda')  # GPU
 def compute(a, b):
-    return a * a + b * b
+    return a * a + b * b  # Same code for all targets!
 
-# CPU execution
-cpu_data = np.random.randn(1000)
-cpu_result = compute(cpu_data, cpu_data)
-
-# For GPU, just change target when decorating
-# @vectorize(['float64(float64, float64)'], target='cuda')
+# Usage is identical regardless of target
+data = np.random.randn(1_000_000)
+result = compute(data, data)
 ```
 
-### Benefits of Portability
+**This is truly portable** - the function body never changes, only the `target` parameter determines where it runs.
 
-**Development flexibility:**
+### Benefits of This Approach
 
-- Debug on CPU with standard Python tools
-- Deploy to GPU for production performance
-- Test on machines without GPU hardware
+**Compared to writing CUDA C/C++:**
 
-**Prototyping workflow:**
+- Stay in Python ecosystem - no separate CUDA C compilation
+- Use familiar NumPy array operations
+- Easier debugging with Python tools
+- Faster prototyping and iteration
 
-1. Write algorithm with `@jit` for CPU
-2. Test and debug with small datasets
-3. Convert to `@cuda.jit` or `@vectorize(target='cuda')` for GPU
-4. Benchmark and optimize
+**Development workflow:**
 
-**Hardware flexibility:**
+1. **Develop on CPU** with `@jit` for rapid prototyping and debugging
+2. **Test and optimize** with small datasets using Python tools
+3. **Adapt to GPU** by converting to `@cuda.jit` (requires thread indexing changes)
+4. **Or use `@vectorize`** for element-wise operations (truly portable, just change `target`)
+5. **Benchmark and profile** on target hardware
 
-- Same codebase runs on different systems
-- Automatically adapt to available hardware
-- Graceful degradation when GPU unavailable
+**Key advantages:**
+
+- **Lower barrier to entry**: Python instead of CUDA C/C++
+- **Systematic translation**: CPU loops → GPU thread indexing follows predictable patterns
+- **True portability with `@vectorize`**: Same function code across CPU/GPU targets
+- **Incremental adoption**: Start with CPU, move to GPU when needed
 
 
 
@@ -890,7 +884,7 @@ Typical speedups range from 10-100x for well-suited problems, though results var
 
 ## Examples
 
-### Example 1: Vector Addition (GPU Kernel Basics)
+### Vector Addition (GPU Kernel Basics)
 
 Vector addition demonstrates the fundamental concepts of GPU kernel programming with Numba.
 
@@ -967,9 +961,8 @@ c = vector_add_gpu(a, b)
 See `examples/vecadd-numba.py` for complete implementation.
 
 
-### Example 2: Monte Carlo Pi Estimation (CPU/GPU Portability)
+### Monte Carlo Pi Estimation (CPU/GPU Portability)
 
-This example showcases Numba's ability to write the same algorithm for both CPU and GPU, demonstrating one of its key advantages. Monte Carlo methods are ideal for Numba because they involve custom loops not available in standard libraries.
 
 **Problem:**
 
@@ -1120,7 +1113,7 @@ pi_estimate = monte_carlo_pi_vectorized(n)
 print(f"Vectorized GPU Estimate: π ≈ {pi_estimate:.6f}")
 ```
 
-**Why This Example Highlights Numba's Strengths:**
+**Observations**
 
 1. **Custom Algorithm Implementation:**
    - Not available as a library function
@@ -1137,10 +1130,6 @@ print(f"Vectorized GPU Estimate: π ≈ {pi_estimate:.6f}")
    - Naturally data-parallel
    - Scales well to many GPU threads
 
-4. **Realistic Scientific Computing:**
-   - Monte Carlo methods are fundamental in science
-   - Similar patterns in physics, finance, statistics
-   - Demonstrates practical use case
 
 **Expected Performance Characteristics:**
 
